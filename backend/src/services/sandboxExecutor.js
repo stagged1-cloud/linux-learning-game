@@ -295,11 +295,12 @@ function validateCommandSafety(command) {
 
   // Dangerous commands that should be blocked
   const blockedPatterns = [
-    /^(rm|dd|mkfs|fdisk|parted|delpart|wipefs)\s*/i,  // Destructive
-    /sudo/i,                                            // Privilege escalation
-    /shutdown|reboot|halt|poweroff/i,                  // System control
-    /install|apt-get|yum|pacman|apk.*install/i,       // Package managers (optional)
-    /\|\s*nc\s|telnet|ssh\s+-i/i,                     // Network exploits
+    /^\s*(rm|dd|mkfs|fdisk|parted|delpart|wipefs)(?:\s+|$)/i,  // Starts with destructive
+    /\|\s*(rm|dd|mkfs|fdisk|parted|delpart|wipefs)(?:\s+|$)/i, // After pipe
+    /sudo/i,                                                     // Privilege escalation
+    /shutdown|reboot|halt|poweroff/i,                           // System control
+    /install|apt-get|yum|pacman|apk.*install/i,                // Package managers (optional)
+    /\|\s*nc\s|telnet|ssh\s+-i/i,                              // Network exploits
   ];
 
   for (const pattern of blockedPatterns) {

@@ -103,9 +103,9 @@ describe('Sandbox Executor', () => {
 describe('Sandbox Executor Integration Tests', () => {
   
   // Skip if Docker socket not available
-  const skipIfNoDcoker = process.env.SKIP_DOCKER_TESTS ? describe.skip : describe;
+  const skipIfNoDocker = process.env.SKIP_DOCKER_TESTS ? describe.skip : describe;
 
-  skipIfNoDcoker('executeCommand', () => {
+  skipIfNoDocker('executeCommand', () => {
     
     it('should execute simple command successfully', async () => {
       const result = await sandboxExecutor.executeCommand(MOCK_CONTAINER_ID, 'echo "test"');
@@ -161,7 +161,7 @@ describe('Sandbox Executor Integration Tests', () => {
     });
   });
 
-  skipIfNoDcoker('executeInDirectory', () => {
+   skipIfNoDocker('executeInDirectory', () => {
     
     it('should execute command in specified directory', async () => {
       // First create a test directory
@@ -206,7 +206,7 @@ describe('Sandbox Executor Integration Tests', () => {
     });
   });
 
-  skipIfNoDcoker('isContainerHealthy', () => {
+   skipIfNoDocker('isContainerHealthy', () => {
     
     it('should return true for running container', async () => {
       const isHealthy = await sandboxExecutor.isContainerHealthy(MOCK_CONTAINER_ID);
@@ -219,7 +219,7 @@ describe('Sandbox Executor Integration Tests', () => {
     });
   });
 
-  skipIfNoDcoker('getContainerInfo', () => {
+   skipIfNoDocker('getContainerInfo', () => {
     
     it('should return container information', async () => {
       const info = await sandboxExecutor.getContainerInfo(MOCK_CONTAINER_ID);

@@ -279,6 +279,14 @@ function initializeCleanupInterval() {
   console.log(`Session cleanup interval initialized: ${cleanupInterval}ms`);
 }
 
+/**
+ * Reset all sessions (for testing)
+ */
+function resetSessions() {
+  sessionStore.clear();
+  userSessions.clear();
+}
+
 module.exports = {
   createSession,
   getSession,
@@ -292,5 +300,6 @@ module.exports = {
   endSession,
   cleanupStaleSessions,
   getStats,
-  initializeCleanupInterval
+  initializeCleanupInterval,
+  resetSessions
 };
