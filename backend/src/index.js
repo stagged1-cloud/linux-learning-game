@@ -193,54 +193,62 @@ io.on('connection', (socket) => {
       const attemptCount = sessionManager.incrementAttempt(socket.id);
       sessionManager.addCommandHistory(socket.id, trimmedCommand, executionResult);
 
-      // Get exercise definition for validation
+      // Get exercise definition for validation (optional - allows command execution without DB)
       const exercise = await getExerciseFromDB(exerciseId);
-      if (!exercise) {
-        socket.emit('error', { message: 'Exercise not found' });
-        return;
-      }
+      
+      if (exercise) {
+        // Validate command against exercise rules
+        const validation = await validateCommand(trimmedCommand, exercise, {
+          exitCode: executionResult.exitCode,
+          stdout: executionResult.stdout,
+          stderr: executionResult.stderr
+        });
 
-      // Validate command against exercise rules
-      const validation = await validateCommand(trimmedCommand, exercise, {
-        exitCode: executionResult.exitCode,
-        stdout: executionResult.stdout,
-        stderr: executionResult.stderr
-      });
+        // Save attempt to database
+        await saveAttempt(session.userId, exerciseId, trimmedCommand, validation.isCorrect, {
+          output: executionResult.stdout,
+          error: executionResult.stderr,
+          exitCode: executionResult.exitCode
+        });
 
-      // Save attempt to database
-      await saveAttempt(session.userId, exerciseId, trimmedCommand, validation.isCorrect, {
-        output: executionResult.stdout,
-        error: executionResult.stderr,
-        exitCode: executionResult.exitCode
-      });
+        // Emit command result
+        socket.emit('command-result', {
+          isCorrect: validation.isCorrect,
+          message: validation.feedback,
+          pointsEarned: validation.isCorrect ? exercise.points : 0,
+          attempt: attemptCount,
+          exitCode: executionResult.exitCode
+        });
 
-      // Emit command result
-      socket.emit('command-result', {
-        isCorrect: validation.isCorrect,
-        message: validation.feedback,
-        pointsEarned: validation.isCorrect ? exercise.points : 0,
-        attempt: attemptCount,
-        exitCode: executionResult.exitCode
-      });
+        // If correct, update progress
+        if (validation.isCorrect) {
+          const isNewCompletion = await updateProgress(
+            session.userId,
+            exerciseId,
+            exercise.points,
+            {
+              hints_used: sessionManager.getSessionSummary(socket.id).hintUsed ? 1 : 0
+            }
+          );
 
-      // If correct, update progress
-      if (validation.isCorrect) {
-        const isNewCompletion = await updateProgress(
-          session.userId,
-          exerciseId,
-          exercise.points,
-          {
-            hints_used: sessionManager.getSessionSummary(socket.id).hintUsed ? 1 : 0
+          if (isNewCompletion) {
+            socket.emit('exercise-completed', {
+              pointsEarned: exercise.points,
+              message: '🎉 Exercise Completed!',
+              totalPoints: await getUserTotalPoints(session.userId)
+            });
           }
-        );
-
-        if (isNewCompletion) {
-          socket.emit('exercise-completed', {
-            pointsEarned: exercise.points,
-            message: '🎉 Exercise Completed!',
-            totalPoints: await getUserTotalPoints(session.userId)
-          });
         }
+      } else {
+        // No exercise validation - just return command executed successfully
+        console.log(`[${session.userId}] Command executed (no exercise validation): ${trimmedCommand}`);
+        socket.emit('command-result', {
+          isCorrect: executionResult.success,
+          message: executionResult.success ? 'Command executed successfully' : 'Command failed',
+          pointsEarned: 0,
+          attempt: attemptCount,
+          exitCode: executionResult.exitCode
+        });
       }
 
     } catch (error) {
