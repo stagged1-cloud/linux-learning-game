@@ -287,7 +287,7 @@ const Terminal: React.FC<TerminalProps> = ({
       socket.disconnect();
       term.dispose();
     };
-  }, [exerciseId, levelId, onCommandExecuted, onExerciseCompleted, isAuthenticated]);
+  }, [exerciseId, levelId]); // Only reconnect if exercise or level changes
 
   return (
     <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden shadow-lg">

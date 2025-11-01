@@ -118,10 +118,13 @@ io.on('connection', (socket) => {
    * Handle command execution
    */
   socket.on('command', async (data) => {
+    console.log(`Command event received on socket ${socket.id}, data:`, data);
     const { command, exerciseId } = data;
     const session = sessionManager.getSession(socket.id);
+    console.log(`Session lookup for ${socket.id}:`, session ? 'FOUND' : 'NOT FOUND');
 
     if (!session) {
+      console.log(`ERROR: No session found for socket ${socket.id}`);
       socket.emit('error', { message: 'Not authenticated' });
       return;
     }

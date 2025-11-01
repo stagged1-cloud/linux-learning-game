@@ -157,6 +157,9 @@ async function getExercise(exerciseId) {
  */
 async function saveAttempt(userId, exerciseId, command, isCorrect, details = {}) {
   try {
+    // Remove null bytes and other problematic characters for PostgreSQL
+    const sanitize = (str) => str ? str.replace(/\0/g, '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '') : null;
+    
     await pool.query(
       `INSERT INTO exercise_attempts 
        (user_id, exercise_id, command_entered, command_output, command_error, 
@@ -165,12 +168,12 @@ async function saveAttempt(userId, exerciseId, command, isCorrect, details = {})
       [
         userId, 
         exerciseId, 
-        command, 
-        details.output || null,
-        details.error || null,
+        sanitize(command), 
+        sanitize(details.output),
+        sanitize(details.error),
         details.exitCode || null,
         isCorrect,
-        details.errorMessage || null
+        sanitize(details.errorMessage)
       ]
     );
   } catch (error) {
