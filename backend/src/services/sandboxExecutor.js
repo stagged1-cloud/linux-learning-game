@@ -6,6 +6,7 @@
 
 const Docker = require('dockerode');
 const path = require('path');
+const { PassThrough } = require('stream');
 
 // Initialize Docker client
 const docker = new Docker({
@@ -14,6 +15,11 @@ const docker = new Docker({
 
 const COMMAND_TIMEOUT = parseInt(process.env.COMMAND_TIMEOUT) || 5000; // 5 seconds
 const MAX_OUTPUT_SIZE = 10 * 1024 * 1024; // 10MB max output
+
+// Constants for sandbox configuration
+const SANDBOX_USER = 'student';
+const SANDBOX_SHELL = '/bin/bash';
+const SANDBOX_HOME = '/home/student';
 
 /**
  * Execute a command in a Docker container
@@ -25,9 +31,9 @@ const MAX_OUTPUT_SIZE = 10 * 1024 * 1024; // 10MB max output
 async function executeCommand(containerId, command, options = {}) {
   const {
     workDir = '/',
-    user = 'student',  // Changed from 'root' to match Dockerfile
+    user = SANDBOX_USER,
     timeout = COMMAND_TIMEOUT,
-    shell = '/bin/bash'  // Changed from '/bin/sh' to match Dockerfile
+    shell = SANDBOX_SHELL
   } = options;
 
   console.log(`[sandboxExecutor] Executing command: "${command}" in container: ${containerId}, workDir: ${workDir}`);
@@ -108,7 +114,6 @@ async function executeCommand(containerId, command, options = {}) {
 
           // Docker multiplexes streams - need to demultiplex them
           // Use dockerode's demuxStream utility
-          const { PassThrough } = require('stream');
           const stdoutStream = new PassThrough();
           const stderrStream = new PassThrough();
 
@@ -235,10 +240,10 @@ async function executeCdCommand(containerId, targetDir, currentDir = '/') {
     let fullPath;
     
     if (targetDir === '~') {
-      fullPath = '/home/student';  // Changed from '/root' to match student user
+      fullPath = SANDBOX_HOME;
     } else if (targetDir === '-') {
       // This would require tracking previous directory - for now, go home
-      fullPath = '/home/student';
+      fullPath = SANDBOX_HOME;
     } else if (targetDir.startsWith('/')) {
       fullPath = path.normalize(targetDir);
     } else {

@@ -6,6 +6,9 @@
 const { Pool } = require('pg');
 const sandboxExecutor = require('./sandboxExecutor');
 
+// Sandbox configuration
+const SANDBOX_HOME = '/home/student';
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
@@ -43,7 +46,7 @@ async function createSession(socketId, sessionData) {
     levelId,
     exerciseId,
     containerId,
-    workDir: '/home/student',  // Changed from '/' to match student user home
+    workDir: SANDBOX_HOME,
     commandHistory: [],
     createdAt: Date.now(),
     lastActivity: Date.now(),
