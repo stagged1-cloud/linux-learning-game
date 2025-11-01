@@ -1,0 +1,115 @@
+{
+  "level": {
+    "levelNumber": 1,
+    "title": "Getting Started - Basic Navigation",
+    "description": "Learn the fundamental commands to navigate the Linux file system",
+    "difficulty": "beginner",
+    "estimatedTimeMinutes": 15,
+    "pointsReward": 100
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Where Am I?",
+      "description": "Use the 'pwd' command to print your current working directory. This command stands for 'print working directory' and shows you where you are in the file system.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "pwd",
+        "expectedOutput": "/home/student"
+      },
+      "hints": [
+        "The command is just three letters: pwd",
+        "Type: pwd",
+        "pwd stands for 'print working directory'"
+      ],
+      "solution": "pwd",
+      "points": 10,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "List Files",
+      "description": "Use the 'ls' command to list files and directories in your current location.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["document.txt", "notes.txt"]
+      },
+      "validationRules": {
+        "command": "ls",
+        "expectedBehavior": "lists_files"
+      },
+      "hints": [
+        "The command is just two letters: ls",
+        "Type: ls",
+        "ls stands for 'list'"
+      ],
+      "solution": "ls",
+      "points": 10,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Change Directory",
+      "description": "Use the 'cd' command to change to the documents directory. Type: cd documents",
+      "initialSetup": {
+        "directory": "/home/student",
+        "subdirectories": ["documents", "downloads", "projects"]
+      },
+      "validationRules": {
+        "command": "cd documents",
+        "expectedDirectory": "/home/student/documents"
+      },
+      "hints": [
+        "cd stands for 'change directory'",
+        "Type: cd documents",
+        "Don't forget to include the directory name after cd"
+      ],
+      "solution": "cd documents",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Go Back Up",
+      "description": "Use 'cd ..' to go back to the parent directory. The two dots (..) represent the parent directory.",
+      "initialSetup": {
+        "directory": "/home/student/documents"
+      },
+      "validationRules": {
+        "command": "cd ..",
+        "expectedDirectory": "/home/student"
+      },
+      "hints": [
+        "Two dots (..) mean 'parent directory'",
+        "Type: cd ..",
+        "Don't forget the space between cd and .."
+      ],
+      "solution": "cd ..",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "List Hidden Files",
+      "description": "Use 'ls -a' to list all files, including hidden ones. Hidden files in Linux start with a dot (.).",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [".bashrc", ".profile", "document.txt"]
+      },
+      "validationRules": {
+        "command": "ls -a",
+        "expectedBehavior": "shows_hidden_files"
+      },
+      "hints": [
+        "The -a flag means 'all files'",
+        "Type: ls -a",
+        "Flags modify how a command works"
+      ],
+      "solution": "ls -a",
+      "points": 20,
+      "difficultyStars": 2
+    }
+  ]
+}

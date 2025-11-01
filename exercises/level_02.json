@@ -1,0 +1,134 @@
+{
+  "level": {
+    "levelNumber": 2,
+    "title": "Creating and Viewing Files",
+    "description": "Learn how to create files and view their contents",
+    "difficulty": "beginner",
+    "estimatedTimeMinutes": 20,
+    "pointsReward": 100
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Create an Empty File",
+      "description": "Use the 'touch' command to create a new file called 'hello.txt'.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "touch hello.txt",
+        "expectedFiles": ["hello.txt"]
+      },
+      "hints": [
+        "The touch command creates empty files",
+        "Type: touch hello.txt",
+        "Make sure to include the file extension .txt"
+      ],
+      "solution": "touch hello.txt",
+      "points": 10,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "View File Contents",
+      "description": "Use the 'cat' command to display the contents of a file called 'readme.txt'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [
+          {
+            "name": "readme.txt",
+            "content": "Welcome to Linux!"
+          }
+        ]
+      },
+      "validationRules": {
+        "command": "cat readme.txt",
+        "expectedBehavior": "displays_file_content"
+      },
+      "hints": [
+        "cat stands for 'concatenate'",
+        "Type: cat readme.txt",
+        "cat displays the contents of files"
+      ],
+      "solution": "cat readme.txt",
+      "points": 10,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Echo Text",
+      "description": "Use 'echo' to print the text 'Hello World' to the terminal.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "echo Hello World",
+        "expectedOutput": "Hello World"
+      },
+      "hints": [
+        "echo prints text to the terminal",
+        "Type: echo Hello World",
+        "Quotes are optional for simple text"
+      ],
+      "solution": "echo Hello World",
+      "points": 15,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Redirect Output to File",
+      "description": "Use 'echo' with redirection (>) to create a file called 'greeting.txt' containing 'Hello Linux'.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "echo Hello Linux > greeting.txt",
+        "expectedFiles": [
+          {
+            "name": "greeting.txt",
+            "content": "Hello Linux"
+          }
+        ]
+      },
+      "hints": [
+        "The > symbol redirects output to a file",
+        "Type: echo Hello Linux > greeting.txt",
+        "This creates greeting.txt with the text inside"
+      ],
+      "solution": "echo Hello Linux > greeting.txt",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Append to File",
+      "description": "Use 'echo' with >> to append 'Welcome!' to the existing greeting.txt file.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [
+          {
+            "name": "greeting.txt",
+            "content": "Hello Linux"
+          }
+        ]
+      },
+      "validationRules": {
+        "command": "echo Welcome! >> greeting.txt",
+        "expectedFiles": [
+          {
+            "name": "greeting.txt",
+            "content": "Hello Linux\nWelcome!"
+          }
+        ]
+      },
+      "hints": [
+        ">> appends instead of overwriting",
+        "Type: echo Welcome! >> greeting.txt",
+        ">> adds to the end of the file"
+      ],
+      "solution": "echo Welcome! >> greeting.txt",
+      "points": 20,
+      "difficultyStars": 3
+    }
+  ]
+}
