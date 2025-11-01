@@ -1,0 +1,10 @@
+{
+  "level": {"levelNumber": 31, "title": "Kernel and Bootloader", "description": "Understanding kernel basics and boot process", "difficulty": "expert", "estimatedTimeMinutes": 40, "pointsReward": 170},
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Check Kernel Version", "description": "Use 'uname -r' to display kernel version.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "uname -r"}, "hints": ["uname -r shows kernel version", "Type: uname -r", "Helps identify Linux distribution"], "solution": "uname -r", "points": 10, "difficultyStars": 1},
+    {"exerciseNumber": 2, "title": "View Kernel Parameters", "description": "Use 'sysctl' to view kernel parameters.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "sysctl -a"}, "hints": ["sysctl -a lists all kernel params", "Type: sysctl -a | head", "Can be used to tune kernel"], "solution": "sysctl -a | head", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Modify Kernel Parameter", "description": "Use 'sysctl -w' to change a kernel parameter.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "modifies_sysctl"}, "hints": ["sudo sysctl -w vm.swappiness=10", "Changes kernel parameter", "Requires sudo"], "solution": "sudo sysctl -w vm.swappiness=10", "points": 20, "difficultyStars": 3},
+    {"exerciseNumber": 4, "title": "View Grub Config", "description": "View GRUB bootloader configuration.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "views_grub"}, "hints": ["cat /etc/default/grub", "Shows GRUB settings", "Edit with root permissions"], "solution": "cat /etc/default/grub", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 5, "title": "List Loaded Kernel Modules", "description": "Use 'lsmod' to show loaded kernel modules.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "lsmod"}, "hints": ["lsmod lists loaded modules", "Type: lsmod | head", "Shows kernel extensions"], "solution": "lsmod | head", "points": 15, "difficultyStars": 2}
+  ]
+}

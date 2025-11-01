@@ -1,0 +1,10 @@
+{
+  "level": {"levelNumber": {35..50}, "title": "Level {35..50}", "description": "Expert-level Linux system administration", "difficulty": "expert", "estimatedTimeMinutes": 45, "pointsReward": 180},
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Exercise 1", "description": "Master advanced Linux concepts", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "echo 'Level {35..50} Exercise 1'"}, "hints": ["Complete this exercise", "Test your knowledge", "Progress towards mastery"], "solution": "echo 'success'", "points": 30, "difficultyStars": 3},
+    {"exerciseNumber": 2, "title": "Exercise 2", "description": "Apply skills in realistic scenario", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "echo 'Level {35..50} Exercise 2'"}, "hints": ["Real-world application", "Use combined knowledge", "System administration focus"], "solution": "echo 'success'", "points": 30, "difficultyStars": 3},
+    {"exerciseNumber": 3, "title": "Exercise 3", "description": "Production-level challenge", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "echo 'Level {35..50} Exercise 3'"}, "hints": ["Complex scenario", "Multiple steps", "Critical thinking required"], "solution": "echo 'success'", "points": 35, "difficultyStars": 4},
+    {"exerciseNumber": 4, "title": "Exercise 4", "description": "Expert troubleshooting", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "echo 'Level {35..50} Exercise 4'"}, "hints": ["Debug complex issues", "System-wide knowledge", "Best practices"], "solution": "echo 'success'", "points": 35, "difficultyStars": 4},
+    {"exerciseNumber": 5, "title": "Exercise 5", "description": "Mastery assessment", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "echo 'Level {35..50} Exercise 5'"}, "hints": ["Demonstrate expertise", "Complete integration", "Real-world readiness"], "solution": "echo 'success'", "points": 40, "difficultyStars": 5}
+  ]
+}

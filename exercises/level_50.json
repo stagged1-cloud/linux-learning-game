@@ -1,0 +1,10 @@
+{
+  "level": {"levelNumber": 50, "title": "Linux Mastery - Real-World Integration", "description": "Expert-level system administration and DevOps", "difficulty": "expert", "estimatedTimeMinutes": 45, "pointsReward": 180},
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Advanced Configuration", "description": "Master complex system setup", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "advanced_config"}, "hints": ["Apply enterprise practices", "Use best practices", "Focus on scalability"], "solution": "completed", "points": 30, "difficultyStars": 3},
+    {"exerciseNumber": 2, "title": "Performance Optimization", "description": "Optimize for production", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "optimization"}, "hints": ["Benchmark systems", "Tune parameters", "Measure improvements"], "solution": "completed", "points": 30, "difficultyStars": 3},
+    {"exerciseNumber": 3, "title": "Integration Challenge", "description": "Integrate multiple systems", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "integration"}, "hints": ["Multi-component setup", "End-to-end testing", "System orchestration"], "solution": "completed", "points": 35, "difficultyStars": 4},
+    {"exerciseNumber": 4, "title": "Troubleshooting Scenario", "description": "Resolve complex problems", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "troubleshooting"}, "hints": ["Systematic debugging", "Root cause analysis", "Preventive measures"], "solution": "completed", "points": 35, "difficultyStars": 4},
+    {"exerciseNumber": 5, "title": "Production Readiness", "description": "Ensure production deployment", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "production_ready"}, "hints": ["Security checks", "Performance testing", "Disaster recovery"], "solution": "completed", "points": 40, "difficultyStars": 5}
+  ]
+}
