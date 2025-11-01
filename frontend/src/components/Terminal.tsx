@@ -192,9 +192,23 @@ const Terminal: React.FC<TerminalProps> = ({
       if (code === 13) {
         term.write('\r\n');
         if (currentLine.trim()) {
-          console.log('Sending command:', currentLine, 'Authenticated:', isAuthenticated);
+          console.log('=== COMMAND DEBUG ===');
+          console.log('Command:', currentLine);
+          console.log('Authenticated:', isAuthenticated);
+          console.log('Socket connected:', socket.connected);
+          console.log('Exercise ID:', exerciseId);
+          console.log('Level ID:', levelId);
+          console.log('====================');
+          
           if (!isAuthenticated) {
             term.writeln('\x1b[31mNot authenticated. Please refresh the page.\x1b[0m');
+            term.write('\r\n$ ');
+            currentLine = '';
+            return;
+          }
+
+          if (!socket.connected) {
+            term.writeln('\x1b[31mSocket disconnected. Please refresh the page.\x1b[0m');
             term.write('\r\n$ ');
             currentLine = '';
             return;
@@ -209,6 +223,7 @@ const Terminal: React.FC<TerminalProps> = ({
             exerciseId,
             levelId,
           });
+          console.log('Command emitted to server');
         } else {
           term.write('$ ');
         }

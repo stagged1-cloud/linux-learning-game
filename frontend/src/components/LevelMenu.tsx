@@ -49,9 +49,9 @@ const LevelMenu: React.FC<LevelMenuProps> = ({
           difficulty,
           pointsReward: 100 + (i - 1) * 10,
           isUnlocked,
-          isCompleted: i < selectedLevel,
-          completionPercentage: i < selectedLevel ? 100 : i === selectedLevel ? 60 : 0,
-          exercisesCompleted: i < selectedLevel ? 5 : i === selectedLevel ? 3 : 0,
+          isCompleted: false, // TODO: Fetch from API
+          completionPercentage: 0, // TODO: Fetch from API
+          exercisesCompleted: 0, // TODO: Fetch from API
           totalExercises: 5,
         });
       }
