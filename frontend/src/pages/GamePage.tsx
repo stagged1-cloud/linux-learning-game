@@ -43,13 +43,18 @@ const GamePage: React.FC = () => {
         setLoading(true);
         const response = await axios.get(`${apiUrl}/levels/${currentLevel}/exercises`);
         console.log('Fetched exercises:', response.data);
-        setExercises(response.data);
+        
+        // Extract exercises array from response
+        const exercisesList = response.data.exercises || response.data;
+        setExercises(exercisesList);
         
         // Set current exercise based on exercise number
-        const exercise = response.data.find((ex: Exercise) => ex.exercise_number === currentExerciseNumber);
+        const exercise = exercisesList.find((ex: Exercise) => ex.exercise_number === currentExerciseNumber);
         if (exercise) {
           setCurrentExercise(exercise);
           console.log('Current exercise:', exercise);
+        } else {
+          console.error('Exercise not found for number:', currentExerciseNumber);
         }
       } catch (error) {
         console.error('Failed to fetch exercises:', error);
