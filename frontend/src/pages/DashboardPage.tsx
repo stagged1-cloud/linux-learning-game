@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDashboard } from '../hooks/useDashboard';
 import AchievementBadge from '../components/AchievementBadge';
@@ -8,7 +8,6 @@ const DashboardPage: React.FC = () => {
   const {
     userStats,
     levelProgress,
-    achievements,
     earnedAchievements,
     recentActivity,
     leaderboardTop5,

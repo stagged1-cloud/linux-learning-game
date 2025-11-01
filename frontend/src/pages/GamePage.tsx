@@ -160,6 +160,20 @@ const GamePage: React.FC = () => {
 
         {/* Main Game Area */}
         <div className="lg:col-span-3 order-1 lg:order-2 flex flex-col gap-6">
+          {/* Terminal - Moved to top for better UX */}
+          <div className="h-96 sm:h-[500px]">
+            <Terminal
+              exerciseId={displayExercise.id}
+              levelId={currentLevel}
+              onCommandExecuted={handleCommandExecuted}
+              onExerciseCompleted={() => {
+                setAchievementText('Exercise Completed! 🎉');
+                setShowAchievementNotification(true);
+              }}
+              validationFeedback={validationFeedback}
+            />
+          </div>
+
           {/* Exercise Panel */}
           <ExercisePanel
             exercise={displayExercise}
@@ -177,20 +191,6 @@ const GamePage: React.FC = () => {
             validationMessage={validationFeedback?.message}
             validationStatus={validationFeedback?.status}
           />
-
-          {/* Terminal */}
-          <div className="h-96 sm:h-[500px]">
-            <Terminal
-              exerciseId={displayExercise.id}
-              levelId={currentLevel}
-              onCommandExecuted={handleCommandExecuted}
-              onExerciseCompleted={() => {
-                setAchievementText('Exercise Completed! 🎉');
-                setShowAchievementNotification(true);
-              }}
-              validationFeedback={validationFeedback}
-            />
-          </div>
 
           {/* Tips Section */}
           <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">

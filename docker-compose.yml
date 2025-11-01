@@ -1,13 +1,12 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
     container_name: linux-game-db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: linux_game
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -23,7 +22,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Redis Cache (Optional - for performance)
   redis:
     image: redis:7-alpine
     container_name: linux-game-redis
@@ -38,21 +36,21 @@ services:
       timeout: 5s
       retries: 5
 
-  # Backend API Server
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: linux-game-backend
     environment:
-      NODE_ENV: ${NODE_ENV:-development}
-      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-password}@postgres:5432/linux_game
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/linux_game
       REDIS_URL: redis://redis:6379
-      JWT_SECRET: ${JWT_SECRET}
-      GROQ_API_KEY: ${GROQ_API_KEY}
+      JWT_SECRET: 3PW8KW1DaqueR5+mbjnnTriSjo397F7KwZshcOXBlVw=
+      GROQ_API_KEY: YOUR_GROQ_API_KEY_HERE
       PORT: 5000
     volumes:
       - ./backend:/app
+      - ./exercises:/exercises
       - /app/node_modules
     ports:
       - "5000:5000"
@@ -66,30 +64,15 @@ services:
     restart: unless-stopped
     command: npm run dev
 
-  # Linux Sandbox Container (Isolated terminal environment)
   sandbox:
     build:
       context: ./docker/sandbox
       dockerfile: Dockerfile
     container_name: linux-game-sandbox
-    privileged: false
-    security_opt:
-      - no-new-privileges:true
-    cap_drop:
-      - ALL
-    cap_add:
-      - CHOWN
-      - SETUID
-      - SETGID
     networks:
       - linux-game-network
     restart: unless-stopped
-    environment:
-      TERM: xterm-256color
-    stdin_open: true
-    tty: true
 
-  # Frontend React Application
   frontend:
     build:
       context: ./frontend
@@ -97,8 +80,8 @@ services:
       target: development
     container_name: linux-game-frontend
     environment:
-      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000}
-      REACT_APP_WS_URL: ${REACT_APP_WS_URL:-ws://localhost:5000}
+      REACT_APP_API_URL: http://backend:5000/api
+      REACT_APP_WS_URL: http://backend:5000
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -117,4 +100,3 @@ networks:
 
 volumes:
   postgres_data:
-    driver: local

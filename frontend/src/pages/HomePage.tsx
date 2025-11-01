@@ -1,7 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const HomePage: React.FC = () => {
+  useEffect(() => {
+    // Auto-create guest user if not logged in
+    const checkOrCreateGuestUser = async () => {
+      const existingToken = localStorage.getItem('token');
+      if (!existingToken) {
+        try {
+          const guestUsername = `guest_${Date.now()}`;
+          const response = await axios.post('http://localhost:5000/api/auth/register', {
+            username: guestUsername,
+            email: `${guestUsername}@guest.local`,
+            password: 'guest123',
+          });
+          
+          localStorage.setItem('token', response.data.token);
+          localStorage.setItem('userId', response.data.userId || response.data.user?.id || guestUsername);
+          console.log('Guest user created:', guestUsername);
+        } catch (error) {
+          console.error('Failed to create guest user:', error);
+        }
+      }
+    };
+
+    checkOrCreateGuestUser();
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 px-4">
       <div className="max-w-4xl text-center">

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Terminal as XTerm } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
@@ -28,25 +28,11 @@ const Terminal: React.FC<TerminalProps> = ({
   const fitAddonRef = useRef<FitAddon | null>(null);
   const socketRef = useRef<any>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const commandHistoryRef = useRef<string[]>([]);
   const historyIndexRef = useRef<number>(-1);
 
-  const writeOutput = useCallback((text: string, color?: 'green' | 'red' | 'yellow') => {
-    const term = xtermRef.current;
-    if (!term) return;
-
-    const colorMap: { [key: string]: string } = {
-      green: '\x1b[32m',
-      red: '\x1b[31m',
-      yellow: '\x1b[33m',
-    };
-
-    if (color) {
-      term.writeln(`${colorMap[color]}${text}\x1b[0m`);
-    } else {
-      term.writeln(text);
-    }
-  }, []);
+  // Removed writeOutput - currently unused but kept for future enhancements
 
   useEffect(() => {
     if (!terminalRef.current) return;
@@ -88,12 +74,40 @@ const Terminal: React.FC<TerminalProps> = ({
     term.loadAddon(fitAddon);
     term.loadAddon(webLinksAddon);
 
-    // Open terminal in DOM
-    term.open(terminalRef.current);
-    fitAddon.fit();
-
+    // Store refs FIRST before opening
     xtermRef.current = term;
     fitAddonRef.current = fitAddon;
+    
+    // Open terminal in DOM
+    term.open(terminalRef.current);
+    
+    // Wait for multiple animation frames to ensure DOM is fully rendered
+    // This is necessary for FitAddon to correctly calculate dimensions
+    let fitAttempts = 0;
+    const attemptFit = () => {
+      requestAnimationFrame(() => {
+        try {
+          if (fitAddonRef.current && terminalRef.current) {
+            // Check if container has dimensions before fitting
+            const container = terminalRef.current;
+            if (container.clientHeight > 0 && container.clientWidth > 0) {
+              fitAddonRef.current.fit();
+            } else if (fitAttempts < 10) {
+              // Container not ready yet, try again
+              fitAttempts++;
+              attemptFit();
+            }
+          }
+        } catch (e) {
+          console.warn('Fit attempt failed:', e);
+          if (fitAttempts < 5) {
+            fitAttempts++;
+            setTimeout(attemptFit, 100);
+          }
+        }
+      });
+    };
+    attemptFit();
 
     // Welcome message
     term.writeln('Welcome to Linux Learning Game!');
@@ -101,8 +115,14 @@ const Terminal: React.FC<TerminalProps> = ({
 
     // Connect to WebSocket
     const apiUrl = process.env.REACT_APP_WS_URL || 'http://localhost:5000';
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId') || 'anonymous';
+    
     const socket = io(apiUrl, {
       transports: ['websocket', 'polling'],
+      auth: {
+        token: token || '',
+      },
     });
 
     socketRef.current = socket;
@@ -110,12 +130,33 @@ const Terminal: React.FC<TerminalProps> = ({
     socket.on('connect', () => {
       setIsConnected(true);
       term.writeln('\x1b[32m✓ Connected to sandbox!\x1b[0m');
+
+       // Authenticate after connection
+       socket.emit('authenticate', {
+         userId: userId,
+         levelId: levelId || 1,
+         exerciseId: exerciseId || '1-1',
+         containerId: 'linux-game-sandbox',
+         token: token || '',
+       });
+    });
+
+    socket.on('authenticated', (data) => {
+      console.log('Terminal authenticated:', data);
+      setIsAuthenticated(true);
+      term.writeln('\x1b[32m✓ Authenticated!\x1b[0m');
       term.write('\r\n$ ');
     });
 
     socket.on('disconnect', () => {
       setIsConnected(false);
       term.writeln('\r\n\x1b[31m✗ Disconnected from sandbox.\x1b[0m');
+    });
+
+    socket.on('error', (error: any) => {
+      console.error('Socket error:', error);
+      term.writeln(`\r\n\x1b[31mError: ${error.message || 'Connection failed'}\x1b[0m`);
+      setIsAuthenticated(false);
     });
 
     socket.on('output', (data: string) => {
@@ -151,6 +192,14 @@ const Terminal: React.FC<TerminalProps> = ({
       if (code === 13) {
         term.write('\r\n');
         if (currentLine.trim()) {
+          console.log('Sending command:', currentLine, 'Authenticated:', isAuthenticated);
+          if (!isAuthenticated) {
+            term.writeln('\x1b[31mNot authenticated. Please refresh the page.\x1b[0m');
+            term.write('\r\n$ ');
+            currentLine = '';
+            return;
+          }
+
           // Add to history
           commandHistoryRef.current.push(currentLine);
           historyIndexRef.current = -1;
@@ -203,11 +252,13 @@ const Terminal: React.FC<TerminalProps> = ({
     // Handle window resize
     const handleResize = () => {
       try {
-        fitAddon.fit();
-        socket.emit('resize', {
-          cols: term.cols,
-          rows: term.rows,
-        });
+        if (fitAddonRef.current && xtermRef.current) {
+          fitAddonRef.current.fit();
+          socket.emit('resize', {
+            cols: xtermRef.current.cols,
+            rows: xtermRef.current.rows,
+          });
+        }
       } catch (e) {
         console.error('Resize error:', e);
       }
@@ -221,7 +272,7 @@ const Terminal: React.FC<TerminalProps> = ({
       socket.disconnect();
       term.dispose();
     };
-  }, [exerciseId, levelId, onCommandExecuted, onExerciseCompleted]);
+  }, [exerciseId, levelId, onCommandExecuted, onExerciseCompleted, isAuthenticated]);
 
   return (
     <div className="flex flex-col h-full bg-gray-900 rounded-lg overflow-hidden shadow-lg">

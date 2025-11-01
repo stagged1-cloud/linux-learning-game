@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     coreutils \
     grep \
     sed \
-    awk \
+    gawk \
     vim \
     nano \
     curl \

@@ -1,0 +1,163 @@
+time="2025-11-01T18:26:43Z" level=warning msg="/mnt/c/Users/don_t/Desktop/Projects/Linux Training/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.63kB done
+#1 DONE 0.0s
+
+#2 [sandbox internal] load build definition from Dockerfile
+#2 transferring dockerfile: 996B 0.0s done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 554B 0.0s done
+#3 DONE 0.1s
+
+#4 [frontend internal] load metadata for docker.io/library/node:18-alpine
+#4 ...
+
+#5 [backend internal] load build definition from Dockerfile
+#5 transferring dockerfile: 458B 0.0s done
+#5 DONE 0.1s
+
+#4 [backend internal] load metadata for docker.io/library/node:18-alpine
+#4 ...
+
+#6 [sandbox internal] load metadata for docker.io/library/ubuntu:22.04
+#6 DONE 0.5s
+
+#4 [frontend internal] load metadata for docker.io/library/node:18-alpine
+#4 DONE 0.4s
+
+#7 [sandbox internal] load .dockerignore
+#7 transferring context: 2B 0.0s done
+#7 DONE 0.0s
+
+#8 [frontend internal] load .dockerignore
+#8 transferring context: 2B 0.0s done
+#8 DONE 0.1s
+
+#9 [backend internal] load .dockerignore
+#9 transferring context: 2B 0.0s done
+#9 DONE 0.1s
+
+#10 [backend base 1/4] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+#10 resolve docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e 0.1s done
+#10 DONE 0.2s
+
+#11 [backend base 2/4] WORKDIR /app
+#11 CACHED
+
+#12 [sandbox 1/6] FROM docker.io/library/ubuntu:22.04@sha256:09506232a8004baa32c47d68f1e5c307d648fdd59f5e7eaa42aaf87914100db3
+#12 resolve docker.io/library/ubuntu:22.04@sha256:09506232a8004baa32c47d68f1e5c307d648fdd59f5e7eaa42aaf87914100db3 0.1s done
+#12 CACHED
+
+#13 [backend internal] load build context
+#13 transferring context: 413.78kB 4.9s
+#13 ...
+
+#14 [sandbox 2/6] RUN apt-get update && apt-get install -y     bash     coreutils     grep     sed     awk     vim     nano     curl     wget     git     net-tools     iputils-ping     procps     sudo     man-db     tree     htop     && apt-get clean     && rm -rf /var/lib/apt/lists/*
+#14 0.536 Get:1 http://security.ubuntu.com/ubuntu jammy-security InRelease [129 kB]
+#14 0.660 Get:2 http://archive.ubuntu.com/ubuntu jammy InRelease [270 kB]
+#14 0.704 Get:3 http://security.ubuntu.com/ubuntu jammy-security/multiverse amd64 Packages [60.9 kB]
+#14 0.725 Get:4 http://security.ubuntu.com/ubuntu jammy-security/restricted amd64 Packages [5878 kB]
+#14 0.999 Get:5 http://security.ubuntu.com/ubuntu jammy-security/main amd64 Packages [3479 kB]
+#14 1.056 Get:6 http://archive.ubuntu.com/ubuntu jammy-updates InRelease [128 kB]
+#14 1.146 Get:7 http://archive.ubuntu.com/ubuntu jammy-backports InRelease [127 kB]
+#14 1.215 Get:8 http://security.ubuntu.com/ubuntu jammy-security/universe amd64 Packages [1288 kB]
+#14 1.250 Get:9 http://archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages [266 kB]
+#14 1.318 Get:10 http://archive.ubuntu.com/ubuntu jammy/main amd64 Packages [1792 kB]
+#14 1.511 Get:11 http://archive.ubuntu.com/ubuntu jammy/restricted amd64 Packages [164 kB]
+#14 1.527 Get:12 http://archive.ubuntu.com/ubuntu jammy/universe amd64 Packages [17.5 MB]
+#14 2.262 Get:13 http://archive.ubuntu.com/ubuntu jammy-updates/multiverse amd64 Packages [69.2 kB]
+#14 2.267 Get:14 http://archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages [3847 kB]
+#14 2.458 Get:15 http://archive.ubuntu.com/ubuntu jammy-updates/restricted amd64 Packages [6148 kB]
+#14 2.774 Get:16 http://archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages [1594 kB]
+#14 2.861 Get:17 http://archive.ubuntu.com/ubuntu jammy-backports/main amd64 Packages [83.9 kB]
+#14 2.870 Get:18 http://archive.ubuntu.com/ubuntu jammy-backports/universe amd64 Packages [35.2 kB]
+#14 3.977 Fetched 42.8 MB in 3s (12.4 MB/s)
+#14 3.977 Reading package lists...
+#14 5.833 Reading package lists...
+#14 7.806 Building dependency tree...
+#14 8.194 Reading state information...
+#14 8.229 Package awk is a virtual package provided by:
+#14 8.229   gawk 1:5.1.0-1ubuntu0.1
+#14 8.229   original-awk 2018-08-27-1
+#14 8.229   mawk 1.3.4.20200120-3
+#14 8.229 
+#14 8.236 E: Package 'awk' has no installation candidate
+#14 ERROR: process "/bin/sh -c apt-get update && apt-get install -y     bash     coreutils     grep     sed     awk     vim     nano     curl     wget     git     net-tools     iputils-ping     procps     sudo     man-db     tree     htop     && apt-get clean     && rm -rf /var/lib/apt/lists/*" did not complete successfully: exit code: 100
+
+#13 [backend internal] load build context
+#13 ...
+
+#15 [frontend internal] load build context
+#15 transferring context: 105.00MB 8.5s done
+#15 CANCELED
+
+#13 [backend internal] load build context
+#13 transferring context: 438.73kB 8.5s done
+#13 CANCELED
+------
+ > [sandbox 2/6] RUN apt-get update && apt-get install -y     bash     coreutils     grep     sed     awk     vim     nano     curl     wget     git     net-tools     iputils-ping     procps     sudo     man-db     tree     htop     && apt-get clean     && rm -rf /var/lib/apt/lists/*:
+3.977 Reading package lists...
+5.833 Reading package lists...
+7.806 Building dependency tree...
+8.194 Reading state information...
+8.229 Package awk is a virtual package provided by:
+8.229   gawk 1:5.1.0-1ubuntu0.1
+8.229   original-awk 2018-08-27-1
+8.229   mawk 1.3.4.20200120-3
+8.229 
+8.236 E: Package 'awk' has no installation candidate
+------
+Dockerfile:6
+
+--------------------
+
+   5 |     # Install essential Linux tools for exercises
+
+   6 | >>> RUN apt-get update && apt-get install -y \
+
+   7 | >>>     bash \
+
+   8 | >>>     coreutils \
+
+   9 | >>>     grep \
+
+  10 | >>>     sed \
+
+  11 | >>>     awk \
+
+  12 | >>>     vim \
+
+  13 | >>>     nano \
+
+  14 | >>>     curl \
+
+  15 | >>>     wget \
+
+  16 | >>>     git \
+
+  17 | >>>     net-tools \
+
+  18 | >>>     iputils-ping \
+
+  19 | >>>     procps \
+
+  20 | >>>     sudo \
+
+  21 | >>>     man-db \
+
+  22 | >>>     tree \
+
+  23 | >>>     htop \
+
+  24 | >>>     && apt-get clean \
+
+  25 | >>>     && rm -rf /var/lib/apt/lists/*
+
+  26 |     
+
+--------------------
+
+target sandbox: failed to solve: process "/bin/sh -c apt-get update && apt-get install -y     bash     coreutils     grep     sed     awk     vim     nano     curl     wget     git     net-tools     iputils-ping     procps     sudo     man-db     tree     htop     && apt-get clean     && rm -rf /var/lib/apt/lists/*" did not complete successfully: exit code: 100
+

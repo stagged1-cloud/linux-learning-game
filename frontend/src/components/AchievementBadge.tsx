@@ -23,28 +23,7 @@ const AchievementBadge: React.FC<AchievementBadgeProps> = ({
     ? 100
     : 0;
 
-  const achievementEmoji: { [key: string]: string } = {
-    '🎯': 'First Steps',
-    '🌟': 'Beginner',
-    '⭐': 'Intermediate',
-    '🔥': 'Advanced',
-    '💎': 'Professional',
-    '👑': 'Expert',
-    '⚡': 'Speed Demon',
-    '🧠': 'No Hints Needed',
-    '💪': 'Persistent',
-    '🏆': 'Leaderboard Top 10',
-    '🎁': 'First Level Complete',
-    '🚀': 'Level Skipped',
-    '✨': 'Perfect Score',
-    '🔓': 'Hint Master',
-    '📊': 'Statistician',
-    '🎪': 'Completionist',
-    '⏱️': 'Speed Runner',
-    '🧩': 'Puzzle Solver',
-    '💡': 'Breakthrough',
-    '🌈': 'Rainbow Collector',
-  };
+  // Achievement emoji mapping - available for future enhancements
 
   return (
     <div

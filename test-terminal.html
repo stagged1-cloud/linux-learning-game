@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Terminal Test</title>
+</head>
+<body>
+    <h1>Terminal Test</h1>
+    <div id="terminal" style="width: 800px; height: 400px; background: black; color: white; padding: 10px; font-family: monospace;"></div>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const terminal = document.getElementById('terminal');
+        const socket = io('http://localhost:5000', {
+            auth: { token: 'test' }
+        });
+
+        socket.on('connect', () => {
+            terminal.innerHTML += 'Connected!<br>';
+            socket.emit('authenticate', { userId: 'testuser', token: 'test' });
+        });
+
+        socket.on('authenticated', (data) => {
+            terminal.innerHTML += 'Authenticated: ' + JSON.stringify(data) + '<br>';
+        });
+
+        socket.on('output', (data) => {
+            terminal.innerHTML += 'Output: ' + data + '<br>';
+        });
+
+        socket.on('command-result', (result) => {
+            terminal.innerHTML += 'Result: ' + JSON.stringify(result) + '<br>';
+        });
+
+        socket.on('error', (err) => {
+            terminal.innerHTML += 'Error: ' + JSON.stringify(err) + '<br>';
+        });
+
+        // Test command
+        setTimeout(() => {
+            terminal.innerHTML += 'Sending pwd command...<br>';
+            socket.emit('command', { command: 'pwd', exerciseId: '1-1', levelId: 1 });
+        }, 2000);
+    </script>
+</body>
+</html>

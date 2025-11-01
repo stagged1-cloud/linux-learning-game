@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import { io, Socket } from 'socket.io-client';
-import { User, UserProgress, Achievement, LeaderboardEntry } from '../types/index';
+import { Achievement, LeaderboardEntry } from '../types/index';
+import apiClient from '../api/axios';
 
 interface UserStats {
   username: string;
@@ -42,15 +42,12 @@ export const useDashboard = () => {
   const [leaderboardTop5, setLeaderboardTop5] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [, setSocket] = useState<Socket | null>(null);
 
   // Fetch user stats from backend
   const fetchUserStats = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('/api/progress/user', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await apiClient.get('/api/progress/user');
 
       setUserStats({
         username: response.data.username,
@@ -76,10 +73,7 @@ export const useDashboard = () => {
   // Fetch level progress from backend
   const fetchLevelProgress = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('/api/progress/levels', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await apiClient.get('/api/progress/levels');
 
       setLevelProgress(
         response.data.map((level: any) => ({
@@ -97,7 +91,7 @@ export const useDashboard = () => {
   // Fetch all achievements
   const fetchAchievements = useCallback(async () => {
     try {
-      const response = await axios.get('/api/progress/achievements/all');
+      const response = await apiClient.get('/api/progress/achievements/all');
       setAchievements(response.data);
     } catch (err) {
       console.error('Failed to fetch achievements:', err);
@@ -107,11 +101,7 @@ export const useDashboard = () => {
   // Fetch earned achievements
   const fetchEarnedAchievements = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('/api/progress/achievements', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      const response = await apiClient.get('/api/progress/achievements');
       setEarnedAchievements(response.data);
     } catch (err) {
       console.error('Failed to fetch earned achievements:', err);
@@ -121,10 +111,7 @@ export const useDashboard = () => {
   // Fetch recent activity
   const fetchRecentActivity = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('/api/progress/recent-activity', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await apiClient.get('/api/progress/recent-activity');
 
       setRecentActivity(
         response.data.map((activity: any) => ({
@@ -142,7 +129,7 @@ export const useDashboard = () => {
   // Fetch leaderboard top 5
   const fetchLeaderboard = useCallback(async () => {
     try {
-      const response = await axios.get('/api/progress/leaderboard?limit=5');
+      const response = await apiClient.get('/api/progress/leaderboard?limit=5');
 
       setLeaderboardTop5(
         response.data.map((entry: any) => ({

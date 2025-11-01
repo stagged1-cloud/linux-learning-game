@@ -10,11 +10,33 @@ const LoginPage: React.FC = () => {
   });
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement actual authentication
-    console.log('Form submitted:', formData);
-    navigate('/game');
+    try {
+      const endpoint = isLogin ? '/auth/login' : '/auth/register';
+      const payload = isLogin
+        ? { email: formData.email, password: formData.password }
+        : { username: formData.username, email: formData.email, password: formData.password };
+
+      const response = await fetch('http://localhost:5000/api' + endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.user.id.toString());
+        navigate('/game');
+      } else {
+        alert(data.error || 'Authentication failed');
+      }
+    } catch (error) {
+      console.error('Auth error:', error);
+      alert('Network error. Please try again.');
+    }
   };
 
   return (

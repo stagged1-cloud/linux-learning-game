@@ -74,37 +74,45 @@ sessionManager.initializeCleanupInterval();
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
 
+  // Log all events for debugging
+  socket.onAny((event, ...args) => {
+    console.log(`Socket ${socket.id} event: ${event}`, args);
+  });
+
   /**
    * Authenticate user and create session
    */
-  socket.on('authenticate', async (data) => {
-    const { userId, levelId, exerciseId, containerId } = data;
+   socket.on('authenticate', async (data) => {
+     console.log('Authenticate event received, keys:', Object.keys(data));
+     console.log('Data:', JSON.stringify(data, null, 2));
+     const { userId, levelId, exerciseId, containerId } = data;
 
-    if (!userId || !containerId) {
-      socket.emit('error', { message: 'Missing required authentication data' });
-      return;
-    }
+     if (!userId || !containerId) {
+       console.log('Missing auth data:', { userId, containerId });
+       socket.emit('error', { message: 'Missing required authentication data' });
+       return;
+     }
 
-    try {
-      const session = await sessionManager.createSession(socket.id, {
-        userId,
-        levelId,
-        exerciseId,
-        containerId
-      });
+     try {
+       const session = await sessionManager.createSession(socket.id, {
+         userId,
+         levelId,
+         exerciseId,
+         containerId
+       });
 
-      socket.emit('authenticated', {
-        message: 'Connected to game server',
-        sessionId: socket.id,
-        workDir: session.workDir
-      });
+       socket.emit('authenticated', {
+         message: 'Connected to game server',
+         sessionId: socket.id,
+         workDir: session.workDir
+       });
 
-      console.log(`User ${userId} authenticated on socket ${socket.id}`);
-    } catch (error) {
-      console.error('Authentication error:', error);
-      socket.emit('error', { message: 'Failed to create session: ' + error.message });
-    }
-  });
+       console.log(`User ${userId} authenticated on socket ${socket.id}`);
+     } catch (error) {
+       console.error('Authentication error:', error);
+       socket.emit('error', { message: 'Failed to create session: ' + error.message });
+     }
+   });
 
   /**
    * Handle command execution
