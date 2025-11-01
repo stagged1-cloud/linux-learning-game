@@ -31,12 +31,15 @@ async function executeCommand(containerId, command, options = {}) {
   } = options;
 
   try {
+    console.log(`[sandboxExecutor] Executing command: ${command} in ${workDir}`);
+    
     // Get container instance
     const container = docker.getContainer(containerId);
 
     // Verify container is running
     const containerInfo = await container.inspect();
     if (!containerInfo.State.Running) {
+      console.error(`[sandboxExecutor] Container ${containerId} is not running`);
       return {
         success: false,
         stdout: '',
@@ -45,6 +48,8 @@ async function executeCommand(containerId, command, options = {}) {
         error: 'CONTAINER_NOT_RUNNING'
       };
     }
+    
+    console.log(`[sandboxExecutor] Container ${containerId} is running`);
 
     // Create execution options
     const execOptions = {
@@ -89,7 +94,7 @@ async function executeCommand(containerId, command, options = {}) {
         }
 
         // Start exec
-        exec.start({ Detach: false }, (err, stream) => {
+        exec.start({ Detach: false, Tty: false }, (err, stream) => {
           if (err) {
             clearTimeout(timeoutHandle);
             return resolve({
@@ -101,25 +106,53 @@ async function executeCommand(containerId, command, options = {}) {
             });
           }
 
-          // Handle stdout and stderr
-          stream.on('data', (chunk) => {
-            const data = chunk.toString('utf8');
-            
-            // Limit output size
-            if (stdout.length + stderr.length + data.length > MAX_OUTPUT_SIZE) {
-              stderr += '\n[Output truncated - exceeded maximum size]';
-              stream.destroy();
-              return;
-            }
+          // Create output container
+          const outputContainer = {
+            stdout: '',
+            stderr: ''
+          };
 
-            stdout += data;
+          // For non-TTY streams, we need to demux manually
+          const { PassThrough } = require('stream');
+          const stdoutStream = new PassThrough();
+          const stderrStream = new PassThrough();
+
+          stdoutStream.on('data', (chunk) => {
+            const data = chunk.toString('utf8');
+            if (outputContainer.stdout.length + outputContainer.stderr.length + data.length <= MAX_OUTPUT_SIZE) {
+              outputContainer.stdout += data;
+            } else if (!outputContainer.stdout.includes('[Output truncated]')) {
+              outputContainer.stdout += '\n[Output truncated - exceeded maximum size]';
+            }
           });
+
+          stderrStream.on('data', (chunk) => {
+            const data = chunk.toString('utf8');
+            if (outputContainer.stdout.length + outputContainer.stderr.length + data.length <= MAX_OUTPUT_SIZE) {
+              outputContainer.stderr += data;
+            } else if (!outputContainer.stderr.includes('[Output truncated]')) {
+              outputContainer.stderr += '\n[Output truncated - exceeded maximum size]';
+            }
+          });
+
+          // Use docker-modem's demux functionality
+          if (container.modem.demux) {
+            container.modem.demux(stream, stdoutStream, stderrStream);
+          } else {
+            // Fallback: treat all output as stdout
+            stream.on('data', (chunk) => {
+              const data = chunk.toString('utf8');
+              if (outputContainer.stdout.length + data.length <= MAX_OUTPUT_SIZE) {
+                outputContainer.stdout += data;
+              }
+            });
+          }
 
           stream.on('error', (err) => {
             clearTimeout(timeoutHandle);
             resolve({
               success: false,
-              stdout,
+              stdout: outputContainer.stdout,
               stderr: err.message,
               exitCode: -1,
               error: 'STREAM_ERROR'
@@ -132,9 +165,10 @@ async function executeCommand(containerId, command, options = {}) {
               clearTimeout(timeoutHandle);
 
               if (err) {
+                console.error('[sandboxExecutor] Failed to inspect exec:', err);
                 return resolve({
                   success: false,
-                  stdout,
+                  stdout: outputContainer.stdout,
                   stderr: err.message,
                   exitCode: -1,
                   error: 'INSPECT_FAILED'
@@ -142,6 +176,9 @@ async function executeCommand(containerId, command, options = {}) {
               }
 
               exitCode = data.ExitCode;
+              stdout = outputContainer.stdout;
+              stderr = outputContainer.stderr;
+              console.log(`[sandboxExecutor] Command completed: exitCode=${exitCode}, stdout=${stdout.length} bytes, stderr=${stderr.length} bytes`);
               resolve({
                 success: exitCode === 0,
                 stdout: stdout.trim(),
