@@ -1,0 +1,17 @@
+{
+  "level": {
+    "levelNumber": 15,
+    "title": "Networking Basics",
+    "description": "Learn fundamental networking commands",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 25,
+    "pointsReward": 140
+  },
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Check IP Address", "description": "Use 'ip addr' to view network interface information.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "ip addr"}, "hints": ["ip addr shows network config", "Type: ip addr", "Shows all network interfaces"], "solution": "ip addr", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Test Network Connectivity", "description": "Use 'ping' to test connection to 8.8.8.8 (Google DNS).", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "ping 8.8.8.8"}, "hints": ["ping tests network connectivity", "Type: ping 8.8.8.8", "Ctrl+C to stop"], "solution": "ping 8.8.8.8", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Check Open Ports", "description": "Use 'ss' or 'netstat' to see network connections.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "checks_connections"}, "hints": ["ss lists network sockets", "Type: ss -tuln", "Shows TCP/UDP ports"], "solution": "ss -tuln", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 4, "title": "Resolve Domain Name", "description": "Use 'nslookup' to find IP address of a domain.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "dns_lookup"}, "hints": ["nslookup resolves domain names", "Type: nslookup google.com", "Shows IP address of domain"], "solution": "nslookup google.com", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 5, "title": "Trace Network Route", "description": "Use 'traceroute' to trace path to a server.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "traces_route"}, "hints": ["traceroute shows hops to destination", "Type: traceroute google.com", "Shows all intermediate routers"], "solution": "traceroute google.com", "points": 25, "difficultyStars": 3}
+  ]
+}

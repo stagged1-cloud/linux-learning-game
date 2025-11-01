@@ -1,0 +1,107 @@
+{
+  "level": {
+    "levelNumber": 12,
+    "title": "Environment Variables",
+    "description": "Learn to set, use, and manage environment variables",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 25,
+    "pointsReward": 130
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "View All Environment Variables",
+      "description": "Use 'env' command to display all environment variables.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "env"
+      },
+      "hints": [
+        "env displays all environment variables",
+        "Type: env",
+        "Shows variables like PATH, HOME, USER"
+      ],
+      "solution": "env",
+      "points": 10,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "View Specific Variable",
+      "description": "Use 'echo $PATH' to display the value of the PATH variable.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "echo $PATH"
+      },
+      "hints": [
+        "$ prefix accesses variable value",
+        "Type: echo $PATH",
+        "PATH contains directories where commands are found"
+      ],
+      "solution": "echo $PATH",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Set a New Variable",
+      "description": "Create a variable called 'MYNAME' with your name as value.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "sets_variable"
+      },
+      "hints": [
+        "Variables are set without $",
+        "Type: MYNAME=John",
+        "No spaces around the = sign"
+      ],
+      "solution": "MYNAME=John",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Use Variable in Command",
+      "description": "Create variable MESSAGE='Hello' and use echo to display it.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "uses_variable"
+      },
+      "hints": [
+        "Set: MESSAGE='Hello'",
+        "Then use: echo $MESSAGE",
+        "The $ lets you access the value"
+      ],
+      "solution": "echo $MESSAGE",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Export Variable",
+      "description": "Use 'export' to make a variable available to child processes.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "exports_variable"
+      },
+      "hints": [
+        "export makes variables available to subshells",
+        "Type: export MYVAR=value",
+        "Without export, variable is local only"
+      ],
+      "solution": "export MYVAR=value",
+      "points": 25,
+      "difficultyStars": 3
+    }
+  ]
+}

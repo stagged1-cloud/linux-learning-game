@@ -1,0 +1,112 @@
+{
+  "level": {
+    "levelNumber": 11,
+    "title": "Text Editing with nano",
+    "description": "Learn to edit files using the nano text editor",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 25,
+    "pointsReward": 130
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Open File with nano",
+      "description": "Use nano to open and edit a file called 'notes.txt'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "notes.txt", "content": "My notes"}]
+      },
+      "validationRules": {
+        "command": "nano notes.txt"
+      },
+      "hints": [
+        "nano is a simple text editor",
+        "Type: nano notes.txt",
+        "Ctrl+X to exit nano"
+      ],
+      "solution": "nano notes.txt",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Create New File with nano",
+      "description": "Use nano to create a brand new file called 'newfile.txt'.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "nano newfile.txt",
+        "expectedFiles": ["newfile.txt"]
+      },
+      "hints": [
+        "nano creates files if they don't exist",
+        "Type: nano newfile.txt",
+        "Write content and save with Ctrl+X"
+      ],
+      "solution": "nano newfile.txt",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Edit File with sed",
+      "description": "Use 'sed' to replace text: replace 'old' with 'new' in document.txt.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "document.txt", "content": "This is old text"}]
+      },
+      "validationRules": {
+        "expectedBehavior": "edits_with_sed"
+      },
+      "hints": [
+        "sed is a stream editor",
+        "Type: sed 's/old/new/' document.txt",
+        "s/old/new/ means substitute old with new"
+      ],
+      "solution": "sed 's/old/new/' document.txt",
+      "points": 20,
+      "difficultyStars": 3
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Replace All Occurrences",
+      "description": "Use 'sed' with 'g' flag to replace all occurrences of a word.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "text.txt", "content": "cat cat cat"}]
+      },
+      "validationRules": {
+        "expectedBehavior": "sed_global_replace"
+      },
+      "hints": [
+        "The 'g' flag replaces all occurrences",
+        "Type: sed 's/cat/dog/g' text.txt",
+        "Without g, only first match is replaced"
+      ],
+      "solution": "sed 's/cat/dog/g' text.txt",
+      "points": 20,
+      "difficultyStars": 3
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Save sed Changes",
+      "description": "Use 'sed -i' to edit a file in-place (save changes to same file).",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "file.txt", "content": "original text"}]
+      },
+      "validationRules": {
+        "expectedBehavior": "sed_inplace"
+      },
+      "hints": [
+        "sed -i edits the file directly",
+        "Type: sed -i 's/original/modified/' file.txt",
+        "The -i flag means 'in-place'"
+      ],
+      "solution": "sed -i 's/original/modified/' file.txt",
+      "points": 25,
+      "difficultyStars": 3
+    }
+  ]
+}

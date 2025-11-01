@@ -1,0 +1,17 @@
+{
+  "level": {
+    "levelNumber": 17,
+    "title": "Working with Archives",
+    "description": "Learn to compress and extract files using tar, zip, and gzip",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 25,
+    "pointsReward": 140
+  },
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Create TAR Archive", "description": "Use 'tar -cvf' to create a tar archive of files.", "initialSetup": {"directory": "/home/student", "files": ["file1.txt", "file2.txt"]}, "validationRules": {"expectedBehavior": "creates_tar"}, "hints": ["tar -cvf archive.tar file1.txt file2.txt", "c=create, v=verbose, f=file", "Creates archive.tar"], "solution": "tar -cvf archive.tar file1.txt file2.txt", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Extract TAR Archive", "description": "Use 'tar -xvf' to extract a tar archive.", "initialSetup": {"directory": "/home/student", "files": ["archive.tar"]}, "validationRules": {"expectedBehavior": "extracts_tar"}, "hints": ["tar -xvf archive.tar", "x=extract, v=verbose, f=file", "Extracts all files from archive"], "solution": "tar -xvf archive.tar", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Compress with Gzip", "description": "Use 'gzip' to compress a file.", "initialSetup": {"directory": "/home/student", "files": ["data.txt"]}, "validationRules": {"expectedBehavior": "gzips_file"}, "hints": ["gzip data.txt", "Creates data.txt.gz", "Original file is replaced"], "solution": "gzip data.txt", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 4, "title": "Decompress Gzip", "description": "Use 'gunzip' or 'gzip -d' to decompress a gzip file.", "initialSetup": {"directory": "/home/student", "files": ["data.txt.gz"]}, "validationRules": {"expectedBehavior": "decompresses_gz"}, "hints": ["gunzip data.txt.gz", "Or: gzip -d data.txt.gz", "Creates original data.txt"], "solution": "gunzip data.txt.gz", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 5, "title": "Create Compressed TAR", "description": "Use 'tar -czf' to create a gzipped tar archive.", "initialSetup": {"directory": "/home/student", "files": ["doc1.txt", "doc2.txt"]}, "validationRules": {"expectedBehavior": "creates_targz"}, "hints": ["tar -czf backup.tar.gz doc1.txt doc2.txt", "z=gzip compression", "Creates compressed archive"], "solution": "tar -czf backup.tar.gz doc1.txt doc2.txt", "points": 25, "difficultyStars": 3}
+  ]
+}

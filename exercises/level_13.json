@@ -1,0 +1,17 @@
+{
+  "level": {
+    "levelNumber": 13,
+    "title": "Bash Scripting Basics",
+    "description": "Learn to create and run simple shell scripts",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 30,
+    "pointsReward": 150
+  },
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Create a Shell Script", "description": "Create a file named 'hello.sh' that echoes 'Hello World'.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedFiles": ["hello.sh"]}, "hints": ["Create with echo > hello.sh", "Type: echo '#!/bin/bash' > hello.sh", "Then: echo 'echo Hello World' >> hello.sh"], "solution": "echo '#!/bin/bash' > hello.sh", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Make Script Executable", "description": "Use chmod to make hello.sh executable.", "initialSetup": {"directory": "/home/student", "files": ["hello.sh"]}, "validationRules": {"command": "chmod +x hello.sh"}, "hints": ["chmod +x adds execute permission", "Type: chmod +x hello.sh", "Now you can run it like ./hello.sh"], "solution": "chmod +x hello.sh", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Run a Script", "description": "Execute the hello.sh script using ./hello.sh", "initialSetup": {"directory": "/home/student", "files": [{"name": "hello.sh", "content": "#!/bin/bash\necho Hello World"}]}, "validationRules": {"command": "./hello.sh"}, "hints": ["./ runs script in current directory", "Type: ./hello.sh", "Script needs execute permission first"], "solution": "./hello.sh", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 4, "title": "Script with Arguments", "description": "Use $1 in a script to access the first argument passed.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "script_arguments"}, "hints": ["$1 is the first argument", "Type in script: echo $1", "Run: ./script.sh argument"], "solution": "echo $1", "points": 20, "difficultyStars": 3},
+    {"exerciseNumber": 5, "title": "Loop in Script", "description": "Create a script using 'for' loop to iterate 3 times.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "script_loop"}, "hints": ["for i in 1 2 3; do echo $i; done", "Or: for i in {1..3}", "Loop repeats commands"], "solution": "for i in {1..3}; do echo $i; done", "points": 25, "difficultyStars": 3}
+  ]
+}

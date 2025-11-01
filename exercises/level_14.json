@@ -1,0 +1,17 @@
+{
+  "level": {
+    "levelNumber": 14,
+    "title": "Package Management",
+    "description": "Learn to install and manage software packages with apt/yum",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 25,
+    "pointsReward": 140
+  },
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Update Package List", "description": "Use 'apt update' to refresh the package list.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "apt update"}, "hints": ["apt update refreshes package info", "Type: apt update", "Requires sudo on some systems"], "solution": "apt update", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Install a Package", "description": "Use 'apt install' to install a package (e.g., curl).", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "installs_package"}, "hints": ["apt install package_name", "Type: apt install curl", "Requires sudo"], "solution": "apt install curl", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Search for Package", "description": "Use 'apt search' to find packages related to 'web'.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "apt search web"}, "hints": ["apt search finds available packages", "Type: apt search web", "Shows all packages with 'web' in name"], "solution": "apt search web", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 4, "title": "Remove a Package", "description": "Use 'apt remove' to uninstall a package.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "removes_package"}, "hints": ["apt remove package_name", "Type: apt remove curl", "Keeps configuration files"], "solution": "apt remove curl", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 5, "title": "Upgrade All Packages", "description": "Use 'apt upgrade' to update all installed packages.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "apt upgrade"}, "hints": ["apt upgrade updates all packages", "Type: apt upgrade", "Asks for confirmation"], "solution": "apt upgrade", "points": 25, "difficultyStars": 2}
+  ]
+}

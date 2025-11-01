@@ -1,0 +1,17 @@
+{
+  "level": {
+    "levelNumber": 18,
+    "title": "Viewing Logs",
+    "description": "Learn to view, filter, and analyze log files",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 25,
+    "pointsReward": 140
+  },
+  "exercises": [
+    {"exerciseNumber": 1, "title": "View Recent Lines with tail", "description": "Use 'tail' to show the last 10 lines of a log file.", "initialSetup": {"directory": "/home/student", "files": [{"name": "app.log", "content": "Line1\nLine2\nLine3\nLine4\nLine5\nLine6\nLine7\nLine8\nLine9\nLine10\nLine11\nLine12\nLine13\nLine14\nLine15"}]}, "validationRules": {"command": "tail app.log"}, "hints": ["tail shows last 10 lines by default", "Type: tail app.log", "tail -f follows log in realtime"], "solution": "tail app.log", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "View First Lines with head", "description": "Use 'head' to show the first 5 lines of a file.", "initialSetup": {"directory": "/home/student", "files": [{"name": "data.log", "content": "Header\nData1\nData2\nData3\nData4\nData5\nData6"}]}, "validationRules": {"command": "head -n 5 data.log"}, "hints": ["head -n N shows first N lines", "Type: head -n 5 data.log", "Default is 10 lines"], "solution": "head -n 5 data.log", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Search Logs with grep", "description": "Use 'grep' to find all ERROR lines in a log file.", "initialSetup": {"directory": "/home/student", "files": [{"name": "error.log", "content": "INFO: Start\nERROR: Failed\nWARN: Check\nERROR: Critical"}]}, "validationRules": {"command": "grep ERROR error.log"}, "hints": ["grep ERROR error.log", "Shows lines containing ERROR", "Use grep -i for case-insensitive"], "solution": "grep ERROR error.log", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 4, "title": "Count Errors", "description": "Count how many ERROR lines are in a log file.", "initialSetup": {"directory": "/home/student", "files": [{"name": "system.log", "content": "ERROR: 1\nERROR: 2\nOK\nERROR: 3"}]}, "validationRules": {"expectedBehavior": "counts_errors"}, "hints": ["grep ERROR system.log | wc -l", "Pipe grep to wc -l to count", "wc -l counts lines"], "solution": "grep ERROR system.log | wc -l", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 5, "title": "Follow Log in Realtime", "description": "Use 'tail -f' to monitor a log file as it updates.", "initialSetup": {"directory": "/home/student", "files": [{"name": "live.log", "content": "message"}]}, "validationRules": {"command": "tail -f live.log"}, "hints": ["tail -f follows log live", "Type: tail -f live.log", "Press Ctrl+C to stop"], "solution": "tail -f live.log", "points": 25, "difficultyStars": 2}
+  ]
+}

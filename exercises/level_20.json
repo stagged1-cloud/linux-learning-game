@@ -1,0 +1,17 @@
+{
+  "level": {
+    "levelNumber": 20,
+    "title": "System Services and Daemons",
+    "description": "Learn to manage systemd services and daemons",
+    "difficulty": "advanced",
+    "estimatedTimeMinutes": 30,
+    "pointsReward": 150
+  },
+  "exercises": [
+    {"exerciseNumber": 1, "title": "List All Services", "description": "Use 'systemctl list-units' to show all systemd services.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "lists_services"}, "hints": ["systemctl list-units --type=service", "Shows all services", "Reveals running and stopped services"], "solution": "systemctl list-units --type=service", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Check Service Status", "description": "Use 'systemctl status' to check if a service is running.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "checks_service"}, "hints": ["systemctl status ssh", "Shows service status", "Active/Inactive"], "solution": "systemctl status ssh", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Start a Service", "description": "Use 'systemctl start' to start a service.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "starts_service"}, "hints": ["systemctl start service_name", "Requires sudo", "Makes service active"], "solution": "sudo systemctl start ssh", "points": 20, "difficultyStars": 3},
+    {"exerciseNumber": 4, "title": "Stop a Service", "description": "Use 'systemctl stop' to stop a running service.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "stops_service"}, "hints": ["systemctl stop service_name", "Requires sudo", "Deactivates service"], "solution": "sudo systemctl stop ssh", "points": 20, "difficultyStars": 3},
+    {"exerciseNumber": 5, "title": "Enable Service on Boot", "description": "Use 'systemctl enable' to auto-start a service on boot.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "enables_service"}, "hints": ["systemctl enable service_name", "Requires sudo", "Automatically starts at boot"], "solution": "sudo systemctl enable ssh", "points": 25, "difficultyStars": 3}
+  ]
+}

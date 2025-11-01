@@ -1,0 +1,17 @@
+{
+  "level": {
+    "levelNumber": 19,
+    "title": "Disk and Storage Management",
+    "description": "Learn to manage disk space, partitions, and storage",
+    "difficulty": "advanced",
+    "estimatedTimeMinutes": 30,
+    "pointsReward": 150
+  },
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Check Disk Usage", "description": "Use 'df -h' to display human-readable disk space.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "df -h"}, "hints": ["df -h shows disk usage in GB/MB", "Type: df -h", "Shows all mounted filesystems"], "solution": "df -h", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Check Directory Size", "description": "Use 'du -sh' to get total size of a directory.", "initialSetup": {"directory": "/home/student", "subdirectories": ["docs"]}, "validationRules": {"command": "du -sh docs"}, "hints": ["du -sh shows directory size", "Type: du -sh docs", "s=summary, h=human-readable"], "solution": "du -sh docs", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Find Large Files", "description": "Use 'find' with '-size' to locate files larger than 100MB.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "finds_large_files"}, "hints": ["find . -size +100M", "M = megabytes", "Shows files larger than 100MB"], "solution": "find . -size +100M", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 4, "title": "Monitor Disk I/O", "description": "Use 'iostat' to view disk input/output statistics.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "checks_io"}, "hints": ["iostat shows disk I/O", "Type: iostat", "May need to install sysstat package"], "solution": "iostat", "points": 20, "difficultyStars": 3},
+    {"exerciseNumber": 5, "title": "Check Inode Usage", "description": "Use 'df -i' to display inode usage instead of disk space.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "df -i"}, "hints": ["df -i shows inode statistics", "Type: df -i", "Inodes = file count limit"], "solution": "df -i", "points": 20, "difficultyStars": 2}
+  ]
+}

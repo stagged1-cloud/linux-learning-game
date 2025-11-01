@@ -1,0 +1,17 @@
+{
+  "level": {
+    "levelNumber": 16,
+    "title": "Process Management",
+    "description": "Learn to monitor and control running processes",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 30,
+    "pointsReward": 150
+  },
+  "exercises": [
+    {"exerciseNumber": 1, "title": "List All Processes", "description": "Use 'ps aux' to display all running processes.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "ps aux"}, "hints": ["ps aux shows detailed process list", "Type: ps aux", "Shows PID, CPU, memory usage"], "solution": "ps aux", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Monitor Processes Realtime", "description": "Use 'top' to view processes in real-time with system stats.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "top"}, "hints": ["top shows live process monitor", "Type: top", "Press q to quit"], "solution": "top", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Find Process by Name", "description": "Use 'pgrep' to find PID of a process named 'bash'.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "finds_process"}, "hints": ["pgrep finds process ID by name", "Type: pgrep bash", "Shows process ID(s)"], "solution": "pgrep bash", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 4, "title": "Terminate a Process", "description": "Use 'kill' to terminate a process by PID.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "kills_process"}, "hints": ["kill sends termination signal", "Type: kill PID_NUMBER", "PID from ps or pgrep"], "solution": "kill PID", "points": 20, "difficultyStars": 3},
+    {"exerciseNumber": 5, "title": "Force Kill a Process", "description": "Use 'kill -9' to forcefully kill a stubborn process.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "force_kills"}, "hints": ["kill -9 forces termination", "Type: kill -9 PID", "-9 is SIGKILL signal"], "solution": "kill -9 PID", "points": 25, "difficultyStars": 3}
+  ]
+}
