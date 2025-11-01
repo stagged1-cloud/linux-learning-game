@@ -83,8 +83,8 @@ services:
       target: development
     container_name: linux-game-frontend
     environment:
-      REACT_APP_API_URL: http://backend:5000/api
-      REACT_APP_WS_URL: http://backend:5000
+      REACT_APP_API_URL: http://localhost:5000/api
+      REACT_APP_WS_URL: http://localhost:5000
     volumes:
       - ./frontend:/app
       - /app/node_modules
