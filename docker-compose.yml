@@ -52,6 +52,7 @@ services:
       - ./backend:/app
       - ./exercises:/exercises
       - /app/node_modules
+      - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket for container execution
     ports:
       - "5000:5000"
     networks:
