@@ -12,9 +12,10 @@ const pool = new Pool({
  * Validate a command against exercise rules
  * @param {string} command - The command entered by user
  * @param {object} exercise - The exercise definition from JSON
+ * @param {object} executionResult - Actual execution result { stdout, stderr, exitCode }
  * @returns {object} Validation result
  */
-async function validateCommand(command, exercise) {
+async function validateCommand(command, exercise, executionResult = {}) {
   const trimmedCommand = command.trim();
   const validationRules = exercise.validationRules;
 
@@ -138,13 +139,23 @@ async function getExercise(exerciseId) {
 /**
  * Save command execution attempt
  */
-async function saveAttempt(userId, exerciseId, command, isCorrect) {
+async function saveAttempt(userId, exerciseId, command, isCorrect, details = {}) {
   try {
     await pool.query(
       `INSERT INTO exercise_attempts 
-       (user_id, exercise_id, command_entered, is_correct, attempted_at) 
-       VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)`,
-      [userId, exerciseId, command, isCorrect]
+       (user_id, exercise_id, command_entered, command_output, command_error, 
+        exit_code, is_correct, error_message, attempted_at) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, CURRENT_TIMESTAMP)`,
+      [
+        userId, 
+        exerciseId, 
+        command, 
+        details.output || null,
+        details.error || null,
+        details.exitCode || null,
+        isCorrect,
+        details.errorMessage || null
+      ]
     );
   } catch (error) {
     console.error('Error saving attempt:', error);
@@ -155,7 +166,7 @@ async function saveAttempt(userId, exerciseId, command, isCorrect) {
 /**
  * Update user progress for a completed exercise
  */
-async function updateProgress(userId, exerciseId, pointsEarned) {
+async function updateProgress(userId, exerciseId, pointsEarned, details = {}) {
   try {
     // Get exercise details
     const exercise = await pool.query(
@@ -179,18 +190,18 @@ async function updateProgress(userId, exerciseId, pointsEarned) {
       // New completion
       await pool.query(
         `INSERT INTO user_progress 
-         (user_id, level_id, exercise_id, is_completed, attempts, completed_at, points_earned) 
-         VALUES ($1, $2, $3, true, 1, CURRENT_TIMESTAMP, $4)`,
-        [userId, levelId, exerciseId, pointsEarned]
+         (user_id, level_id, exercise_id, is_completed, attempts, completed_at, points_earned, hints_used) 
+         VALUES ($1, $2, $3, true, 1, CURRENT_TIMESTAMP, $4, $5)`,
+        [userId, levelId, exerciseId, pointsEarned, details.hints_used || 0]
       );
     } else if (!existing.rows[0].is_completed) {
       // Mark as completed
       await pool.query(
         `UPDATE user_progress 
          SET is_completed = true, completed_at = CURRENT_TIMESTAMP, 
-             points_earned = $1, attempts = attempts + 1 
-         WHERE user_id = $2 AND exercise_id = $3`,
-        [pointsEarned, userId, exerciseId]
+             points_earned = $1, attempts = attempts + 1, hints_used = $3
+         WHERE user_id = $2 AND exercise_id = $4`,
+        [pointsEarned, userId, details.hints_used || 0, exerciseId]
       );
     } else {
       // Already completed, just increment attempts

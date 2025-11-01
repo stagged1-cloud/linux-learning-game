@@ -5,6 +5,7 @@ export interface User {
   totalPoints: number;
   currentLevel: number;
   createdAt: string;
+  lastLogin?: string;
 }
 
 export interface Level {
@@ -52,6 +53,7 @@ export interface Achievement {
   icon: string;
   criteria: any;
   points: number;
+  earnedAt?: string;
 }
 
 export interface LeaderboardEntry {
@@ -60,6 +62,36 @@ export interface LeaderboardEntry {
   totalPoints: number;
   currentLevel: number;
   exercisesCompleted: number;
+}
+
+export interface UserStats {
+  username: string;
+  totalPoints: number;
+  currentLevel: number;
+  levelsCompleted: number;
+  exercisesCompleted: number;
+  timeSpentHours: number;
+  leaderboardRank: number;
+  joinDate: string;
+  avgAttemptsPerExercise: number;
+  hintsUsed: number;
+  perfectScores: number;
+  successRate: number;
+  currentStreak: number;
+}
+
+export interface LevelProgressItem {
+  levelNumber: number;
+  title: string;
+  totalExercises: number;
+  exercisesCompleted: number;
+}
+
+export interface RecentActivityItem {
+  exerciseTitle: string;
+  levelNumber: number;
+  points: number;
+  timeAgo: string;
 }
 
 export interface TerminalCommand {

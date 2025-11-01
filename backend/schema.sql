@@ -63,12 +63,18 @@ CREATE TABLE IF NOT EXISTS user_progress (
     UNIQUE(user_id, exercise_id)
 );
 
+-- Create index for hints_used tracking
+CREATE INDEX IF NOT EXISTS idx_user_progress_hints_used ON user_progress(hints_used) WHERE hints_used > 0;
+
 -- Exercise attempts (for analytics)
 CREATE TABLE IF NOT EXISTS exercise_attempts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     exercise_id UUID REFERENCES exercises(id) ON DELETE CASCADE,
     command_entered TEXT NOT NULL,
+    command_output TEXT,
+    command_error TEXT,
+    exit_code INTEGER,
     is_correct BOOLEAN DEFAULT false,
     error_message TEXT,
     attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
