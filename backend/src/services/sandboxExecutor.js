@@ -112,41 +112,41 @@ async function executeCommand(containerId, command, options = {}) {
             stderr: ''
           };
 
-          // For non-TTY streams, we need to demux manually
-          const { PassThrough } = require('stream');
-          const stdoutStream = new PassThrough();
-          const stderrStream = new PassThrough();
-
-          stdoutStream.on('data', (chunk) => {
-            const data = chunk.toString('utf8');
-            if (outputContainer.stdout.length + outputContainer.stderr.length + data.length <= MAX_OUTPUT_SIZE) {
-              outputContainer.stdout += data;
-            } else if (!outputContainer.stdout.includes('[Output truncated]')) {
-              outputContainer.stdout += '\n[Output truncated - exceeded maximum size]';
-            }
-          });
-
-          stderrStream.on('data', (chunk) => {
-            const data = chunk.toString('utf8');
-            if (outputContainer.stdout.length + outputContainer.stderr.length + data.length <= MAX_OUTPUT_SIZE) {
-              outputContainer.stderr += data;
-            } else if (!outputContainer.stderr.includes('[Output truncated]')) {
-              outputContainer.stderr += '\n[Output truncated - exceeded maximum size]';
-            }
-          });
-
-          // Use docker-modem's demux functionality
-          if (container.modem.demux) {
-            container.modem.demux(stream, stdoutStream, stderrStream);
-          } else {
-            // Fallback: treat all output as stdout
-            stream.on('data', (chunk) => {
-              const data = chunk.toString('utf8');
-              if (outputContainer.stdout.length + data.length <= MAX_OUTPUT_SIZE) {
-                outputContainer.stdout += data;
+          // Manual demultiplexing for Docker streams
+          // Docker stream format: [stream_type(1), 0, 0, 0, size(4), payload]
+          // stream_type: 0=stdin, 1=stdout, 2=stderr, 3=systemerr
+          let buffer = Buffer.alloc(0);
+          
+          stream.on('data', (chunk) => {
+            buffer = Buffer.concat([buffer, chunk]);
+            
+            // Process complete messages from buffer
+            while (buffer.length >= 8) {
+              const header = buffer.slice(0, 8);
+              const streamType = header[0];
+              const payloadSize = header.readUInt32BE(4);
+              
+              // Check if we have the complete payload
+              if (buffer.length < 8 + payloadSize) {
+                break; // Wait for more data
               }
-            });
-          }
+              
+              const payload = buffer.slice(8, 8 + payloadSize).toString('utf8');
+              buffer = buffer.slice(8 + payloadSize);
+              
+              // Append to appropriate stream
+              if (outputContainer.stdout.length + outputContainer.stderr.length + payload.length <= MAX_OUTPUT_SIZE) {
+                if (streamType === 1) {
+                  outputContainer.stdout += payload;
+                } else if (streamType === 2) {
+                  outputContainer.stderr += payload;
+                }
+              } else if (!outputContainer.stdout.includes('[Output truncated]')) {
+                outputContainer.stdout += '\n[Output truncated - exceeded maximum size]';
+                break;
+              }
+            }
+          });
 
           stream.on('error', (err) => {
             clearTimeout(timeoutHandle);
