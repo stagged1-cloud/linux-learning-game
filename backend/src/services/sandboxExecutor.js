@@ -93,8 +93,8 @@ async function executeCommand(containerId, command, options = {}) {
           });
         }
 
-        // Start exec
-        exec.start({ Detach: false, Tty: false }, (err, stream) => {
+        // Start exec (Tty: false is the default and required for multiplexed streams)
+        exec.start({ Detach: false }, (err, stream) => {
           if (err) {
             clearTimeout(timeoutHandle);
             return resolve({
@@ -117,7 +117,11 @@ async function executeCommand(containerId, command, options = {}) {
           // stream_type: 0=stdin, 1=stdout, 2=stderr, 3=systemerr
           let buffer = Buffer.alloc(0);
           
+          let truncated = false;
+          
           stream.on('data', (chunk) => {
+            if (truncated) return; // Skip processing if already truncated
+            
             buffer = Buffer.concat([buffer, chunk]);
             
             // Process complete messages from buffer
@@ -125,6 +129,13 @@ async function executeCommand(containerId, command, options = {}) {
               const header = buffer.slice(0, 8);
               const streamType = header[0];
               const payloadSize = header.readUInt32BE(4);
+              
+              // Validate stream type
+              if (streamType > 3) {
+                console.error(`[sandboxExecutor] Invalid stream type: ${streamType}`);
+                buffer = buffer.slice(8 + payloadSize); // Skip this message
+                continue;
+              }
               
               // Check if we have the complete payload
               if (buffer.length < 8 + payloadSize) {
@@ -134,15 +145,17 @@ async function executeCommand(containerId, command, options = {}) {
               const payload = buffer.slice(8, 8 + payloadSize).toString('utf8');
               buffer = buffer.slice(8 + payloadSize);
               
-              // Append to appropriate stream
+              // Append to appropriate stream (1=stdout, 2=stderr)
               if (outputContainer.stdout.length + outputContainer.stderr.length + payload.length <= MAX_OUTPUT_SIZE) {
                 if (streamType === 1) {
                   outputContainer.stdout += payload;
                 } else if (streamType === 2) {
                   outputContainer.stderr += payload;
                 }
-              } else if (!outputContainer.stdout.includes('[Output truncated]')) {
+                // streamType 0 (stdin) and 3 (systemerr) are ignored
+              } else {
                 outputContainer.stdout += '\n[Output truncated - exceeded maximum size]';
+                truncated = true;
                 break;
               }
             }
