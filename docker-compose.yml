@@ -72,6 +72,9 @@ services:
     networks:
       - linux-game-network
     restart: unless-stopped
+    stdin_open: true
+    tty: true
+    command: ["tail", "-f", "/dev/null"]
 
   frontend:
     build:
