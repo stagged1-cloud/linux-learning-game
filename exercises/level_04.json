@@ -1,0 +1,114 @@
+{
+  "level": {
+    "levelNumber": 4,
+    "title": "File Operations",
+    "description": "Learn to copy, move, rename, and delete files",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 25,
+    "pointsReward": 120
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Copy a File",
+      "description": "Use the 'cp' command to copy 'original.txt' to 'backup.txt'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "original.txt", "content": "Important data"}]
+      },
+      "validationRules": {
+        "command": "cp original.txt backup.txt",
+        "expectedFiles": ["original.txt", "backup.txt"]
+      },
+      "hints": [
+        "cp stands for 'copy'",
+        "Type: cp original.txt backup.txt",
+        "Format: cp source destination"
+      ],
+      "solution": "cp original.txt backup.txt",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Rename a File",
+      "description": "Use the 'mv' command to rename 'oldname.txt' to 'newname.txt'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "oldname.txt", "content": "Content"}]
+      },
+      "validationRules": {
+        "expectedBehavior": "renames_file"
+      },
+      "hints": [
+        "mv stands for 'move' (can also rename)",
+        "Type: mv oldname.txt newname.txt",
+        "Moving to same directory with different name = rename"
+      ],
+      "solution": "mv oldname.txt newname.txt",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Move a File",
+      "description": "Move 'document.txt' from current directory into the 'documents' folder.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "document.txt", "content": "Important"}],
+        "subdirectories": ["documents"]
+      },
+      "validationRules": {
+        "expectedBehavior": "moves_file"
+      },
+      "hints": [
+        "Use mv to move files to another directory",
+        "Type: mv document.txt documents/",
+        "Include the trailing slash for directory"
+      ],
+      "solution": "mv document.txt documents/",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Copy a Directory Recursively",
+      "description": "Use 'cp -r' to copy a directory and all its contents. Copy 'projects' to 'backup_projects'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "subdirectories": ["projects"]
+      },
+      "validationRules": {
+        "expectedBehavior": "copies_directory"
+      },
+      "hints": [
+        "cp -r copies directories recursively",
+        "Type: cp -r projects backup_projects",
+        "The -r flag means 'recursive'"
+      ],
+      "solution": "cp -r projects backup_projects",
+      "points": 20,
+      "difficultyStars": 3
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Delete a File Safely",
+      "description": "Use the 'rm' command to delete 'temporary.txt'. Be careful - rm doesn't use a trash bin!",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "temporary.txt", "content": "temp"}]
+      },
+      "validationRules": {
+        "command": "rm temporary.txt"
+      },
+      "hints": [
+        "rm removes files permanently",
+        "Type: rm temporary.txt",
+        "⚠️  No undo! Be careful with rm"
+      ],
+      "solution": "rm temporary.txt",
+      "points": 20,
+      "difficultyStars": 3
+    }
+  ]
+}

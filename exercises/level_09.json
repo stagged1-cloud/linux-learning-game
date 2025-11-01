@@ -1,0 +1,107 @@
+{
+  "level": {
+    "levelNumber": 9,
+    "title": "Users and Groups",
+    "description": "Learn to work with users and groups in Linux",
+    "difficulty": "advanced",
+    "estimatedTimeMinutes": 30,
+    "pointsReward": 130
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Check Current User",
+      "description": "Use 'whoami' to display your current username.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "whoami"
+      },
+      "hints": [
+        "whoami shows your current user",
+        "Type: whoami",
+        "Simple command that prints username"
+      ],
+      "solution": "whoami",
+      "points": 10,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Show User ID",
+      "description": "Use 'id' to show your user ID, group ID, and group memberships.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "id"
+      },
+      "hints": [
+        "id shows user and group information",
+        "Type: id",
+        "Shows UID, GID, and all groups"
+      ],
+      "solution": "id",
+      "points": 10,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "List All Users",
+      "description": "View /etc/passwd to see all users on the system.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "cat /etc/passwd"
+      },
+      "hints": [
+        "/etc/passwd contains user information",
+        "Type: cat /etc/passwd",
+        "Shows all system and regular users"
+      ],
+      "solution": "cat /etc/passwd",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Create New User",
+      "description": "Use 'useradd' to create a new user called 'newuser' (requires sudo).",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "creates_user"
+      },
+      "hints": [
+        "useradd creates new users (needs sudo)",
+        "Type: sudo useradd newuser",
+        "You'll need administrator privileges"
+      ],
+      "solution": "sudo useradd newuser",
+      "points": 25,
+      "difficultyStars": 3
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Add User to Group",
+      "description": "Use 'usermod -aG' to add a user to the 'sudo' group.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "adds_user_to_group"
+      },
+      "hints": [
+        "usermod modifies user accounts",
+        "Type: sudo usermod -aG sudo newuser",
+        "-aG = append to group"
+      ],
+      "solution": "sudo usermod -aG sudo newuser",
+      "points": 25,
+      "difficultyStars": 3
+    }
+  ]
+}

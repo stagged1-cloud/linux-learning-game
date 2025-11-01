@@ -1,0 +1,113 @@
+{
+  "level": {
+    "levelNumber": 5,
+    "title": "Text Processing",
+    "description": "Learn to search, filter, and process text using grep, sed, and other tools",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 30,
+    "pointsReward": 120
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Search Text with grep",
+      "description": "Use 'grep' to find lines containing 'error' in the file 'log.txt'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "log.txt", "content": "Starting process\nerror: Connection failed\nRetrying...\nerror: Timeout"}]
+      },
+      "validationRules": {
+        "command": "grep error log.txt",
+        "expectedBehavior": "searches_text"
+      },
+      "hints": [
+        "grep searches for text patterns",
+        "Type: grep error log.txt",
+        "It will show lines containing 'error'"
+      ],
+      "solution": "grep error log.txt",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Case-Insensitive Search",
+      "description": "Use 'grep -i' to search for 'ERROR' in log.txt, ignoring case.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "log.txt", "content": "Error occurred\nerror: failed\nERROR: Critical"}]
+      },
+      "validationRules": {
+        "expectedBehavior": "case_insensitive_search"
+      },
+      "hints": [
+        "grep -i ignores case (uppercase/lowercase)",
+        "Type: grep -i error log.txt",
+        "The -i flag makes it case-insensitive"
+      ],
+      "solution": "grep -i error log.txt",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Count Matching Lines",
+      "description": "Use 'grep -c' to count how many lines contain 'warning' in log.txt.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "log.txt", "content": "warning: Low memory\nwarning: High CPU\nInfo: Process started"}]
+      },
+      "validationRules": {
+        "expectedBehavior": "counts_matches"
+      },
+      "hints": [
+        "grep -c counts matching lines",
+        "Type: grep -c warning log.txt",
+        "Returns a number instead of lines"
+      ],
+      "solution": "grep -c warning log.txt",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Invert Match",
+      "description": "Use 'grep -v' to show lines that DON'T contain 'debug' in log.txt.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "log.txt", "content": "debug: Line 1\nInfo: Running\ndebug: Line 2\nWarning: Check this"}]
+      },
+      "validationRules": {
+        "expectedBehavior": "inverts_match"
+      },
+      "hints": [
+        "grep -v shows lines that DON'T match",
+        "Type: grep -v debug log.txt",
+        "The -v flag inverts the match"
+      ],
+      "solution": "grep -v debug log.txt",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Pipe Output to grep",
+      "description": "Use 'ls -l' piped to 'grep' to find all .txt files in the directory.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["file1.txt", "script.sh", "notes.txt", "config"]
+      },
+      "validationRules": {
+        "expectedBehavior": "pipes_to_grep"
+      },
+      "hints": [
+        "The pipe | sends output to another command",
+        "Type: ls -l | grep .txt",
+        "This shows directory listings filtered for .txt files"
+      ],
+      "solution": "ls -l | grep .txt",
+      "points": 25,
+      "difficultyStars": 3
+    }
+  ]
+}

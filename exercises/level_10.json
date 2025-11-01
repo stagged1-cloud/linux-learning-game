@@ -1,0 +1,107 @@
+{
+  "level": {
+    "levelNumber": 10,
+    "title": "System Information",
+    "description": "Learn commands to view system information and resource usage",
+    "difficulty": "advanced",
+    "estimatedTimeMinutes": 25,
+    "pointsReward": 130
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Check System Uptime",
+      "description": "Use 'uptime' to show how long the system has been running.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "uptime"
+      },
+      "hints": [
+        "uptime shows system uptime and load",
+        "Type: uptime",
+        "Displays running time and number of users"
+      ],
+      "solution": "uptime",
+      "points": 10,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "View System Architecture",
+      "description": "Use 'uname -a' to display system information and architecture.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "uname -a"
+      },
+      "hints": [
+        "uname shows system information",
+        "Type: uname -a",
+        "-a flag shows all information"
+      ],
+      "solution": "uname -a",
+      "points": 15,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Check Disk Space",
+      "description": "Use 'df -h' to show disk space usage in human-readable format.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "checks_disk_space"
+      },
+      "hints": [
+        "df shows disk space usage",
+        "Type: df -h",
+        "-h makes sizes human-readable (GB, MB)"
+      ],
+      "solution": "df -h",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Check Memory Usage",
+      "description": "Use 'free -h' to display available and used memory.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "checks_memory"
+      },
+      "hints": [
+        "free shows memory usage (RAM)",
+        "Type: free -h",
+        "-h shows human-readable format"
+      ],
+      "solution": "free -h",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "List Running Processes",
+      "description": "Use 'ps aux' to display all running processes with details.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "lists_processes"
+      },
+      "hints": [
+        "ps lists processes",
+        "Type: ps aux",
+        "aux flags show all processes with details"
+      ],
+      "solution": "ps aux",
+      "points": 20,
+      "difficultyStars": 2
+    }
+  ]
+}

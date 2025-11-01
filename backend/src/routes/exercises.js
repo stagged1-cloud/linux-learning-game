@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
 const authMiddleware = require('../middleware/auth');
+const { getHint, getExplanation } = require('../services/groqAI');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -91,8 +92,8 @@ router.post('/submit', authMiddleware, async (req, res) => {
   }
 });
 
-// Get hint
-router.get('/:exerciseId/hint', authMiddleware, async (req, res) => {
+// Get static hints (fallback)
+router.get('/:exerciseId/hints', authMiddleware, async (req, res) => {
   try {
     const { exerciseId } = req.params;
 
@@ -119,6 +120,59 @@ router.get('/:exerciseId/hint', authMiddleware, async (req, res) => {
     res.json({ hints });
   } catch (error) {
     console.error('Hint fetch error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Get AI hint from Groq
+router.get('/:exerciseId/ai-hint', authMiddleware, async (req, res) => {
+  try {
+    const { exerciseId } = req.params;
+    const { userCommand } = req.query;
+
+    // In a real app, you'd load this from the database
+    // For now, create a mock exercise
+    const exercise = {
+      title: 'Exercise ' + exerciseId,
+      description: 'Complete the Linux exercise',
+      solution: 'pwd',
+      hints: ['Try using pwd'],
+    };
+
+    const aiHint = await getHint(exercise, userCommand);
+
+    // Track hint usage
+    await pool.query(
+      `INSERT INTO user_progress (user_id, exercise_id, hints_used, level_id) 
+       VALUES ($1, $2, 1, (SELECT level_id FROM exercises WHERE id = $2))
+       ON CONFLICT (user_id, exercise_id) 
+       DO UPDATE SET hints_used = user_progress.hints_used + 1`,
+      [req.userId, exerciseId]
+    );
+
+    res.json({ hint: aiHint });
+  } catch (error) {
+    console.error('AI hint fetch error:', error);
+    // Fallback to static hint
+    res.json({ hint: 'Try a different approach!' });
+  }
+});
+
+// Get explanation for exercise
+router.get('/:exerciseId/explanation', authMiddleware, async (req, res) => {
+  try {
+    const { exerciseId } = req.params;
+
+    const exercise = {
+      title: 'Exercise ' + exerciseId,
+      description: 'Complete the Linux exercise',
+      solution: 'pwd',
+    };
+
+    const explanation = await getExplanation(exercise);
+    res.json({ explanation });
+  } catch (error) {
+    console.error('Explanation fetch error:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });

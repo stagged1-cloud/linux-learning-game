@@ -1,0 +1,110 @@
+{
+  "level": {
+    "levelNumber": 3,
+    "title": "Working with Directories",
+    "description": "Learn to create, move, and explore directories",
+    "difficulty": "beginner",
+    "estimatedTimeMinutes": 20,
+    "pointsReward": 100
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Create a Directory",
+      "description": "Use the 'mkdir' command to create a new directory called 'projects'.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "command": "mkdir projects",
+        "expectedFiles": ["projects"]
+      },
+      "hints": [
+        "mkdir stands for 'make directory'",
+        "Type: mkdir projects",
+        "This creates a new folder named 'projects'"
+      ],
+      "solution": "mkdir projects",
+      "points": 10,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Create Multiple Directories",
+      "description": "Create three directories at once: documents, downloads, and backup.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "creates_multiple_directories"
+      },
+      "hints": [
+        "You can use mkdir for multiple directories",
+        "Type: mkdir documents downloads backup",
+        "Separate directory names with spaces"
+      ],
+      "solution": "mkdir documents downloads backup",
+      "points": 15,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Remove an Empty Directory",
+      "description": "Use the 'rmdir' command to remove an empty directory. First create 'temp', then remove it.",
+      "initialSetup": {
+        "directory": "/home/student"
+      },
+      "validationRules": {
+        "expectedBehavior": "removes_directory"
+      },
+      "hints": [
+        "rmdir removes empty directories",
+        "First: mkdir temp",
+        "Then: rmdir temp"
+      ],
+      "solution": "rmdir temp",
+      "points": 15,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Navigate Through Directories",
+      "description": "Change to the documents directory, verify location with pwd, then return home.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "subdirectories": ["documents"]
+      },
+      "validationRules": {
+        "expectedBehavior": "navigates_directories"
+      },
+      "hints": [
+        "Use cd to navigate",
+        "Use pwd to verify your location",
+        "cd without arguments returns home"
+      ],
+      "solution": "cd documents",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "List Directory Contents with Details",
+      "description": "Use 'ls -l' to list files with detailed information like permissions and file size.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["file1.txt", "file2.txt", "config.conf"]
+      },
+      "validationRules": {
+        "expectedBehavior": "lists_detailed_files"
+      },
+      "hints": [
+        "ls -l shows long format with details",
+        "Type: ls -l",
+        "You'll see permissions, owner, size, and date"
+      ],
+      "solution": "ls -l",
+      "points": 20,
+      "difficultyStars": 2
+    }
+  ]
+}

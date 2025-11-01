@@ -1,0 +1,115 @@
+{
+  "level": {
+    "levelNumber": 6,
+    "title": "File Permissions",
+    "description": "Understand and modify file permissions and ownership",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 30,
+    "pointsReward": 120
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "View File Permissions",
+      "description": "Use 'ls -l' to view detailed file information including permissions.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["script.sh"]
+      },
+      "validationRules": {
+        "command": "ls -l",
+        "expectedBehavior": "shows_permissions"
+      },
+      "hints": [
+        "ls -l shows files with permissions",
+        "Type: ls -l",
+        "First column shows permissions (rwxrwxrwx format)"
+      ],
+      "solution": "ls -l",
+      "points": 15,
+      "difficultyStars": 1
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Make File Executable",
+      "description": "Use 'chmod +x' to make script.sh executable.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["script.sh"]
+      },
+      "validationRules": {
+        "command": "chmod +x script.sh",
+        "expectedBehavior": "makes_executable"
+      },
+      "hints": [
+        "chmod changes file permissions",
+        "Type: chmod +x script.sh",
+        "+x adds execute permission"
+      ],
+      "solution": "chmod +x script.sh",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Remove Write Permission",
+      "description": "Use 'chmod -w' to remove write permission from 'readonly.txt'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["readonly.txt"]
+      },
+      "validationRules": {
+        "expectedBehavior": "removes_write_perm"
+      },
+      "hints": [
+        "chmod -w removes write permission",
+        "Type: chmod -w readonly.txt",
+        "-w removes write access from all"
+      ],
+      "solution": "chmod -w readonly.txt",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Set Exact Permissions",
+      "description": "Use 'chmod 755' to set permissions to rwxr-xr-x on 'app.sh'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["app.sh"]
+      },
+      "validationRules": {
+        "command": "chmod 755 app.sh",
+        "expectedBehavior": "sets_numeric_perms"
+      },
+      "hints": [
+        "chmod with numbers: 755 = rwxr-xr-x",
+        "Type: chmod 755 app.sh",
+        "7=rwx, 5=r-x, 5=r-x (owner, group, others)"
+      ],
+      "solution": "chmod 755 app.sh",
+      "points": 25,
+      "difficultyStars": 3
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Change File Owner",
+      "description": "Use 'chown' to change the owner of 'file.txt' to user 'admin'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["file.txt"]
+      },
+      "validationRules": {
+        "expectedBehavior": "changes_owner"
+      },
+      "hints": [
+        "chown changes file owner (needs sudo)",
+        "Type: chown admin file.txt",
+        "Only root can change ownership usually"
+      ],
+      "solution": "chown admin file.txt",
+      "points": 25,
+      "difficultyStars": 3
+    }
+  ]
+}

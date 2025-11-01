@@ -1,0 +1,113 @@
+{
+  "level": {
+    "levelNumber": 8,
+    "title": "Piping and Redirection",
+    "description": "Master using pipes and redirections to combine commands powerfully",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 30,
+    "pointsReward": 130
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Pipe Output",
+      "description": "Use pipe (|) to send output from 'ls' to 'grep' to find files containing 'data'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["data.txt", "backup.txt", "data_old.txt"]
+      },
+      "validationRules": {
+        "expectedBehavior": "pipes_commands"
+      },
+      "hints": [
+        "The pipe | sends output to next command",
+        "Type: ls | grep data",
+        "Shows only filenames containing 'data'"
+      ],
+      "solution": "ls | grep data",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Chain Multiple Pipes",
+      "description": "Use multiple pipes: 'cat log.txt | grep error | wc -l' to count errors.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": [{"name": "log.txt", "content": "error: failed\nerror: timeout\nwarning: check\nerror: critical"}]
+      },
+      "validationRules": {
+        "expectedBehavior": "chains_pipes"
+      },
+      "hints": [
+        "You can pipe as many commands as needed",
+        "Type: cat log.txt | grep error | wc -l",
+        "wc -l counts lines"
+      ],
+      "solution": "cat log.txt | grep error | wc -l",
+      "points": 25,
+      "difficultyStars": 3
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Redirect to File",
+      "description": "Use '>' to redirect output of 'ls' to a file called 'filelist.txt'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["file1.txt", "file2.txt"]
+      },
+      "validationRules": {
+        "command": "ls > filelist.txt",
+        "expectedFiles": ["filelist.txt"]
+      },
+      "hints": [
+        "> redirects output to a file",
+        "Type: ls > filelist.txt",
+        "Overwrites file if it exists"
+      ],
+      "solution": "ls > filelist.txt",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Redirect Error Output",
+      "description": "Use '2>' to redirect error messages to 'errors.log'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": []
+      },
+      "validationRules": {
+        "expectedBehavior": "redirects_errors"
+      },
+      "hints": [
+        "2> redirects error output (stderr)",
+        "Type: ls nonexistent 2> errors.log",
+        "1> is for output, 2> is for errors"
+      ],
+      "solution": "ls nonexistent 2> errors.log",
+      "points": 25,
+      "difficultyStars": 3
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Pipe to Multiple Outputs",
+      "description": "Use 'tee' to save output to file AND display it: 'ls | tee filelist.txt'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["file1.txt", "file2.txt"]
+      },
+      "validationRules": {
+        "expectedBehavior": "tees_output"
+      },
+      "hints": [
+        "tee saves to file and shows output",
+        "Type: ls | tee filelist.txt",
+        "Useful when you want both file and display"
+      ],
+      "solution": "ls | tee filelist.txt",
+      "points": 20,
+      "difficultyStars": 2
+    }
+  ]
+}

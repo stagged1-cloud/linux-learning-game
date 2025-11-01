@@ -1,0 +1,112 @@
+{
+  "level": {
+    "levelNumber": 7,
+    "title": "Finding Files",
+    "description": "Learn to search for files using find and locate commands",
+    "difficulty": "intermediate",
+    "estimatedTimeMinutes": 25,
+    "pointsReward": 120
+  },
+  "exercises": [
+    {
+      "exerciseNumber": 1,
+      "title": "Find Files by Name",
+      "description": "Use 'find' to search for all files named '*.txt' in the current directory.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["readme.txt", "notes.txt", "script.sh"]
+      },
+      "validationRules": {
+        "expectedBehavior": "finds_by_name"
+      },
+      "hints": [
+        "find searches for files recursively",
+        "Type: find . -name '*.txt'",
+        ". means current directory"
+      ],
+      "solution": "find . -name '*.txt'",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 2,
+      "title": "Find Large Files",
+      "description": "Use 'find' with -size flag to find files larger than 1MB.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["big.iso", "small.txt"]
+      },
+      "validationRules": {
+        "expectedBehavior": "finds_by_size"
+      },
+      "hints": [
+        "find -size searches by file size",
+        "Type: find . -size +1M",
+        "+1M means larger than 1 megabyte"
+      ],
+      "solution": "find . -size +1M",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 3,
+      "title": "Find Recently Modified Files",
+      "description": "Use 'find' to locate files modified in the last day.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["recent.txt", "old.txt"]
+      },
+      "validationRules": {
+        "expectedBehavior": "finds_recent_files"
+      },
+      "hints": [
+        "find -mtime finds by modification time",
+        "Type: find . -mtime -1",
+        "-1 means modified within 1 day ago"
+      ],
+      "solution": "find . -mtime -1",
+      "points": 20,
+      "difficultyStars": 2
+    },
+    {
+      "exerciseNumber": 4,
+      "title": "Find and Execute on Results",
+      "description": "Use 'find' with -exec to delete all .tmp files in current directory.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "files": ["file.tmp", "data.tmp", "readme.txt"]
+      },
+      "validationRules": {
+        "expectedBehavior": "executes_on_findings"
+      },
+      "hints": [
+        "find -exec runs commands on results",
+        "Type: find . -name '*.tmp' -exec rm {} \\;",
+        "{} is replaced with filename"
+      ],
+      "solution": "find . -name '*.tmp' -exec rm {} \\;",
+      "points": 25,
+      "difficultyStars": 3
+    },
+    {
+      "exerciseNumber": 5,
+      "title": "Find by Type",
+      "description": "Use 'find' to locate only directories (not files) starting with '.config'.",
+      "initialSetup": {
+        "directory": "/home/student",
+        "subdirectories": [".config", ".cache"]
+      },
+      "validationRules": {
+        "expectedBehavior": "finds_by_type"
+      },
+      "hints": [
+        "find -type d searches for directories only",
+        "Type: find . -type d -name '.config'",
+        "-type f would search for files only"
+      ],
+      "solution": "find . -type d -name '.config'",
+      "points": 20,
+      "difficultyStars": 2
+    }
+  ]
+}
