@@ -1,0 +1,10 @@
+{
+  "level": {"levelNumber": 24, "title": "Cron and Task Scheduling", "description": "Schedule tasks to run automatically with cron", "difficulty": "advanced", "estimatedTimeMinutes": 30, "pointsReward": 150},
+  "exercises": [
+    {"exerciseNumber": 1, "title": "View Crontab", "description": "Use 'crontab -l' to view scheduled tasks.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "crontab -l"}, "hints": ["crontab -l lists current cron jobs", "Type: crontab -l", "Shows your scheduled tasks"], "solution": "crontab -l", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Edit Crontab", "description": "Use 'crontab -e' to edit your cron schedule.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "crontab -e"}, "hints": ["crontab -e opens editor", "Add cron jobs with format", "Syntax: minute hour day month weekday command"], "solution": "crontab -e", "points": 20, "difficultyStars": 3},
+    {"exerciseNumber": 3, "title": "Schedule Daily Task", "description": "Add cron job to run script daily at 2 AM.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "adds_cron"}, "hints": ["0 2 * * * /path/to/script.sh", "0 = minute, 2 = hour", "* means every day, month, weekday"], "solution": "0 2 * * * /path/to/script.sh", "points": 25, "difficultyStars": 3},
+    {"exerciseNumber": 4, "title": "Schedule Hourly Task", "description": "Add cron job to run command every hour.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "cron_hourly"}, "hints": ["0 * * * * command", "0 minute, * hour = every hour", "Runs at start of every hour"], "solution": "0 * * * * command", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 5, "title": "Remove Cron Job", "description": "Use 'crontab -r' to remove all cron jobs.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "crontab -r"}, "hints": ["crontab -r removes all jobs", "Use crontab -e to remove specific job", "No undo - be careful!"], "solution": "crontab -r", "points": 20, "difficultyStars": 2}
+  ]
+}

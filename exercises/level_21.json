@@ -1,0 +1,17 @@
+{
+  "level": {
+    "levelNumber": 21,
+    "title": "Advanced Permissions",
+    "description": "Learn umask, setuid, setgid, and sticky bit",
+    "difficulty": "advanced",
+    "estimatedTimeMinutes": 30,
+    "pointsReward": 150
+  },
+  "exercises": [
+    {"exerciseNumber": 1, "title": "View Current umask", "description": "Use 'umask' to see default file creation permissions.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "umask"}, "hints": ["umask shows default permissions", "Type: umask", "Shows octal value"], "solution": "umask", "points": 10, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Set umask", "description": "Use 'umask 0022' to set file creation mask.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "umask 0022"}, "hints": ["umask 0022 is common default", "Type: umask 0022", "Affects new files/directories"], "solution": "umask 0022", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Set SETUID bit", "description": "Use 'chmod u+s' to set SETUID on a file.", "initialSetup": {"directory": "/home/student", "files": ["executable"]}, "validationRules": {"expectedBehavior": "sets_setuid"}, "hints": ["chmod u+s executable", "SETUID allows file to run as owner", "Appears as 's' in ls -l"], "solution": "chmod u+s executable", "points": 20, "difficultyStars": 3},
+    {"exerciseNumber": 4, "title": "Set SETGID bit", "description": "Use 'chmod g+s' to set SETGID on a directory.", "initialSetup": {"directory": "/home/student", "subdirectories": ["shared"]}, "validationRules": {"expectedBehavior": "sets_setgid"}, "hints": ["chmod g+s shared", "SETGID makes files inherit group", "Useful for shared directories"], "solution": "chmod g+s shared", "points": 20, "difficultyStars": 3},
+    {"exerciseNumber": 5, "title": "Set Sticky Bit", "description": "Use 'chmod +t' to set sticky bit on a directory.", "initialSetup": {"directory": "/home/student", "subdirectories": ["tmp"]}, "validationRules": {"command": "chmod +t tmp"}, "hints": ["chmod +t tmp sets sticky bit", "Prevents others from deleting files", "Appears as 't' in ls -l"], "solution": "chmod +t tmp", "points": 25, "difficultyStars": 3}
+  ]
+}

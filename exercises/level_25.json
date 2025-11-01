@@ -1,0 +1,10 @@
+{
+  "level": {"levelNumber": 25, "title": "LVM - Logical Volume Management", "description": "Learn to manage storage with LVM", "difficulty": "advanced", "estimatedTimeMinutes": 35, "pointsReward": 160},
+  "exercises": [
+    {"exerciseNumber": 1, "title": "List Physical Volumes", "description": "Use 'pvs' to list physical volumes.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "pvs"}, "hints": ["pvs lists physical volumes", "Type: pvs", "Shows LVM physical disks"], "solution": "pvs", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "List Volume Groups", "description": "Use 'vgs' to list volume groups.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "vgs"}, "hints": ["vgs lists volume groups", "Type: vgs", "Shows grouping of physical volumes"], "solution": "vgs", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "List Logical Volumes", "description": "Use 'lvs' to list logical volumes.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "lvs"}, "hints": ["lvs lists logical volumes", "Type: lvs", "Shows LVM logical disks"], "solution": "lvs", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 4, "title": "Create Physical Volume", "description": "Use 'pvcreate' to initialize disk for LVM.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "creates_pv"}, "hints": ["sudo pvcreate /dev/sdX", "Initialize partition for LVM", "Only on unformatted partitions"], "solution": "sudo pvcreate /dev/sdX", "points": 25, "difficultyStars": 3},
+    {"exerciseNumber": 5, "title": "Create Volume Group", "description": "Use 'vgcreate' to create a volume group.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "creates_vg"}, "hints": ["sudo vgcreate vg0 /dev/sdX", "Combines physical volumes", "vg0 is the group name"], "solution": "sudo vgcreate vg0 /dev/sdX", "points": 25, "difficultyStars": 3}
+  ]
+}

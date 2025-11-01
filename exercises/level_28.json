@@ -1,0 +1,10 @@
+{
+  "level": {"levelNumber": 28, "title": "Monitoring and Performance Tuning", "description": "Learn system monitoring and performance optimization", "difficulty": "advanced", "estimatedTimeMinutes": 35, "pointsReward": 160},
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Monitor System Load", "description": "Use 'uptime' and 'w' to check system load.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "uptime"}, "hints": ["uptime shows system load", "Type: uptime", "Also try 'w' for more details"], "solution": "uptime", "points": 10, "difficultyStars": 1},
+    {"exerciseNumber": 2, "title": "Real-time CPU Usage", "description": "Use 'top' with batch mode for CPU monitoring.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "top -b -n 1"}, "hints": ["top -b -n 1 shows one iteration", "b=batch, n=number", "Easier to script than interactive"], "solution": "top -b -n 1", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Memory Profiling", "description": "Use 'vmstat' for virtual memory statistics.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "vmstat"}, "hints": ["vmstat shows memory usage", "Type: vmstat", "Shows swaps, page faults, etc."], "solution": "vmstat", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 4, "title": "CPU Affinity", "description": "Use 'taskset' to bind process to specific CPU.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "sets_affinity"}, "hints": ["taskset -c 0 command", "Binds to CPU 0", "Improves cache locality"], "solution": "taskset -c 0 command", "points": 25, "difficultyStars": 3},
+    {"exerciseNumber": 5, "title": "Process Priority", "description": "Use 'nice' and 'renice' to set process priority.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "sets_priority"}, "hints": ["nice -n 10 command", "Lower priority = higher nice value", "Range: -20 (high) to 19 (low)"], "solution": "nice -n 10 command", "points": 25, "difficultyStars": 3}
+  ]
+}

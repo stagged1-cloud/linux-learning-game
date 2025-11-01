@@ -1,0 +1,10 @@
+{
+  "level": {"levelNumber": 30, "title": "Troubleshooting and Debugging", "description": "Essential troubleshooting techniques and debugging tools", "difficulty": "advanced", "estimatedTimeMinutes": 35, "pointsReward": 160},
+  "exercises": [
+    {"exerciseNumber": 1, "title": "Check System Logs", "description": "Use 'journalctl' to view system logs.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "journalctl -xe"}, "hints": ["journalctl -xe shows recent logs", "x=extra, e=jump to end", "Use for systemd errors"], "solution": "journalctl -xe", "points": 15, "difficultyStars": 2},
+    {"exerciseNumber": 2, "title": "Check Network Connectivity", "description": "Use 'nc' to test port connectivity.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "tests_port"}, "hints": ["nc -zv hostname port", "z=scan, v=verbose", "Tests if port is open"], "solution": "nc -zv hostname port", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 3, "title": "Debug Process", "description": "Use 'strace' to trace system calls.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "traces_calls"}, "hints": ["strace -e trace=open ls", "Traces specific system calls", "Shows what program is doing"], "solution": "strace -e trace=open ls", "points": 25, "difficultyStars": 3},
+    {"exerciseNumber": 4, "title": "Monitor Processes", "description": "Use 'htop' for advanced process monitoring.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"command": "htop"}, "hints": ["htop is interactive process monitor", "Type: htop", "More user-friendly than top"], "solution": "htop", "points": 20, "difficultyStars": 2},
+    {"exerciseNumber": 5, "title": "Test Disk Issues", "description": "Use 'fsck' to check filesystem integrity.", "initialSetup": {"directory": "/home/student"}, "validationRules": {"expectedBehavior": "checks_fs"}, "hints": ["sudo fsck -n /dev/sdX1", "n=no-execute (dry run)", "p=automatic repair"], "solution": "sudo fsck -n /dev/sdX1", "points": 25, "difficultyStars": 3}
+  ]
+}
