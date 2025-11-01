@@ -122,22 +122,25 @@ io.on('connection', (socket) => {
     const session = sessionManager.getSession(socket.id);
 
     if (!session) {
+      console.error(`[COMMAND] No session found for socket ${socket.id}`);
       socket.emit('error', { message: 'Not authenticated' });
       return;
     }
 
     if (!command || typeof command !== 'string') {
+      console.error(`[COMMAND] Invalid command type: ${typeof command}`);
       socket.emit('error', { message: 'Invalid command' });
       return;
     }
 
     const trimmedCommand = command.trim();
-    console.log(`[${session.userId}] Command: ${trimmedCommand} (Exercise: ${exerciseId})`);
+    console.log(`[COMMAND] User ${session.userId} on socket ${socket.id}: "${trimmedCommand}" (Exercise: ${exerciseId}, Container: ${session.containerId})`);
 
     try {
       // Validate command safety
       const safetyCheck = sandboxExecutor.validateCommandSafety(trimmedCommand);
       if (!safetyCheck.valid) {
+        console.warn(`[COMMAND] Command blocked for safety: ${trimmedCommand}`);
         socket.emit('output', `$ ${trimmedCommand}\r\n`);
         socket.emit('output', `bash: ${safetyCheck.reason}\r\n`);
         socket.emit('command-result', {
@@ -156,6 +159,7 @@ io.on('connection', (socket) => {
       let executionResult;
       
       if (trimmedCommand.startsWith('cd ') || trimmedCommand === 'cd') {
+        console.log(`[COMMAND] Executing cd command: ${trimmedCommand}`);
         executionResult = await sandboxExecutor.executeInDirectory(
           session.containerId,
           trimmedCommand,
@@ -166,22 +170,28 @@ io.on('connection', (socket) => {
         if (executionResult.success && executionResult.newWorkDir) {
           sessionManager.updateWorkDir(socket.id, executionResult.newWorkDir);
           socket.emit('workdir-changed', { workDir: executionResult.newWorkDir });
+          console.log(`[COMMAND] Changed directory to: ${executionResult.newWorkDir}`);
         } else if (executionResult.stderr) {
           socket.emit('output', executionResult.stderr + '\r\n');
         }
       } else {
         // Execute normal command
+        console.log(`[COMMAND] Executing command in ${session.workDir}`);
         executionResult = await sandboxExecutor.executeInDirectory(
           session.containerId,
           trimmedCommand,
           session.workDir
         );
 
+        console.log(`[COMMAND] Execution result - exitCode: ${executionResult.exitCode}, stdout: ${executionResult.stdout?.length || 0} bytes, stderr: ${executionResult.stderr?.length || 0} bytes`);
+
         // Send output to client
         if (executionResult.stdout) {
+          console.log(`[COMMAND] Sending stdout to client: "${executionResult.stdout.substring(0, 100)}..."`);
           socket.emit('output', executionResult.stdout + '\r\n');
         }
         if (executionResult.stderr && !executionResult.success) {
+          console.log(`[COMMAND] Sending stderr to client: "${executionResult.stderr}"`);
           socket.emit('output', `bash: ${executionResult.stderr}\r\n`);
         }
       }

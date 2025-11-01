@@ -31,12 +31,15 @@ async function executeCommand(containerId, command, options = {}) {
   } = options;
 
   try {
+    console.log(`[sandboxExecutor] Executing command: ${command} in ${workDir}`);
+    
     // Get container instance
     const container = docker.getContainer(containerId);
 
     // Verify container is running
     const containerInfo = await container.inspect();
     if (!containerInfo.State.Running) {
+      console.error(`[sandboxExecutor] Container ${containerId} is not running`);
       return {
         success: false,
         stdout: '',
@@ -45,6 +48,8 @@ async function executeCommand(containerId, command, options = {}) {
         error: 'CONTAINER_NOT_RUNNING'
       };
     }
+    
+    console.log(`[sandboxExecutor] Container ${containerId} is running`);
 
     // Create execution options
     const execOptions = {
@@ -88,7 +93,7 @@ async function executeCommand(containerId, command, options = {}) {
           });
         }
 
-        // Start exec
+        // Start exec (Tty: false is the default and required for multiplexed streams)
         exec.start({ Detach: false }, (err, stream) => {
           if (err) {
             clearTimeout(timeoutHandle);
@@ -101,25 +106,66 @@ async function executeCommand(containerId, command, options = {}) {
             });
           }
 
-          // Handle stdout and stderr
-          stream.on('data', (chunk) => {
-            const data = chunk.toString('utf8');
-            
-            // Limit output size
-            if (stdout.length + stderr.length + data.length > MAX_OUTPUT_SIZE) {
-              stderr += '\n[Output truncated - exceeded maximum size]';
-              stream.destroy();
-              return;
-            }
+          // Create output container
+          const outputContainer = {
+            stdout: '',
+            stderr: ''
+          };
 
-            stdout += data;
+          // Manual demultiplexing for Docker streams
+          // Docker stream format: [stream_type(1), 0, 0, 0, size(4), payload]
+          // stream_type: 0=stdin, 1=stdout, 2=stderr, 3=systemerr
+          let buffer = Buffer.alloc(0);
+          
+          let truncated = false;
+          
+          stream.on('data', (chunk) => {
+            if (truncated) return; // Skip processing if already truncated
+            
+            buffer = Buffer.concat([buffer, chunk]);
+            
+            // Process complete messages from buffer
+            while (buffer.length >= 8) {
+              const header = buffer.slice(0, 8);
+              const streamType = header[0];
+              const payloadSize = header.readUInt32BE(4);
+              
+              // Validate stream type
+              if (streamType > 3) {
+                console.error(`[sandboxExecutor] Invalid stream type: ${streamType}`);
+                buffer = buffer.slice(8 + payloadSize); // Skip this message
+                continue;
+              }
+              
+              // Check if we have the complete payload
+              if (buffer.length < 8 + payloadSize) {
+                break; // Wait for more data
+              }
+              
+              const payload = buffer.slice(8, 8 + payloadSize).toString('utf8');
+              buffer = buffer.slice(8 + payloadSize);
+              
+              // Append to appropriate stream (1=stdout, 2=stderr)
+              if (outputContainer.stdout.length + outputContainer.stderr.length + payload.length <= MAX_OUTPUT_SIZE) {
+                if (streamType === 1) {
+                  outputContainer.stdout += payload;
+                } else if (streamType === 2) {
+                  outputContainer.stderr += payload;
+                }
+                // streamType 0 (stdin) and 3 (systemerr) are ignored
+              } else {
+                outputContainer.stdout += '\n[Output truncated - exceeded maximum size]';
+                truncated = true;
+                break;
+              }
+            }
           });
 
           stream.on('error', (err) => {
             clearTimeout(timeoutHandle);
             resolve({
               success: false,
-              stdout,
+              stdout: outputContainer.stdout,
               stderr: err.message,
               exitCode: -1,
               error: 'STREAM_ERROR'
@@ -132,9 +178,10 @@ async function executeCommand(containerId, command, options = {}) {
               clearTimeout(timeoutHandle);
 
               if (err) {
+                console.error('[sandboxExecutor] Failed to inspect exec:', err);
                 return resolve({
                   success: false,
-                  stdout,
+                  stdout: outputContainer.stdout,
                   stderr: err.message,
                   exitCode: -1,
                   error: 'INSPECT_FAILED'
@@ -142,6 +189,9 @@ async function executeCommand(containerId, command, options = {}) {
               }
 
               exitCode = data.ExitCode;
+              stdout = outputContainer.stdout;
+              stderr = outputContainer.stderr;
+              console.log(`[sandboxExecutor] Command completed: exitCode=${exitCode}, stdout=${stdout.length} bytes, stderr=${stderr.length} bytes`);
               resolve({
                 success: exitCode === 0,
                 stdout: stdout.trim(),
