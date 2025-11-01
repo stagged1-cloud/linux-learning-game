@@ -16,8 +16,24 @@ const pool = new Pool({
  * @returns {object} Validation result
  */
 async function validateCommand(command, exercise, executionResult = {}) {
+  if (!exercise) {
+    return {
+      isCorrect: false,
+      feedback: 'Exercise not found',
+    };
+  }
+
   const trimmedCommand = command.trim();
-  const validationRules = exercise.validationRules;
+  // Handle both camelCase and snake_case
+  const validationRules = exercise.validationRules || exercise.validation_rules;
+
+  if (!validationRules) {
+    console.error('No validation rules found for exercise:', exercise);
+    return {
+      isCorrect: false,
+      feedback: 'No validation rules defined for this exercise',
+    };
+  }
 
   // Exact command match
   if (validationRules.command) {
