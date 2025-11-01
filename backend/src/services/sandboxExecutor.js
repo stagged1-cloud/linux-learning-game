@@ -112,22 +112,31 @@ async function executeCommand(containerId, command, options = {}) {
             });
           }
 
-          // Docker multiplexes streams - need to demultiplex them
-          // Use dockerode's demuxStream utility
+          // Docker multiplexes streams when TTY is disabled (Tty: false)
+          // The API combines stdout/stderr into a single stream with 8-byte headers
+          // indicating stream type (1=stdout, 2=stderr) and payload size.
+          // Use dockerode's demuxStream utility to separate them.
           const stdoutStream = new PassThrough();
           const stderrStream = new PassThrough();
 
           // Demultiplex the stream
           docker.modem.demuxStream(stream, stdoutStream, stderrStream);
 
+          // Helper function to check and enforce output size limits
+          const checkOutputSize = (currentStdout, currentStderr, newData) => {
+            if (currentStdout.length + currentStderr.length + newData.length > MAX_OUTPUT_SIZE) {
+              stream.destroy();
+              return true;
+            }
+            return false;
+          };
+
           // Collect stdout
           stdoutStream.on('data', (chunk) => {
             const data = chunk.toString('utf8');
             
-            // Limit output size
-            if (stdout.length + stderr.length + data.length > MAX_OUTPUT_SIZE) {
+            if (checkOutputSize(stdout, stderr, data)) {
               stdout += '\n[Output truncated - exceeded maximum size]';
-              stream.destroy();
               return;
             }
 
@@ -138,10 +147,8 @@ async function executeCommand(containerId, command, options = {}) {
           stderrStream.on('data', (chunk) => {
             const data = chunk.toString('utf8');
             
-            // Limit output size
-            if (stdout.length + stderr.length + data.length > MAX_OUTPUT_SIZE) {
-              stderr += '\n[Output truncated - exceeded maximum size]';
-              stream.destroy();
+            if (checkOutputSize(stdout, stderr, data)) {
+              stdout += '\n[Output truncated - exceeded maximum size]';
               return;
             }
 
