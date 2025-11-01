@@ -25,10 +25,12 @@ const MAX_OUTPUT_SIZE = 10 * 1024 * 1024; // 10MB max output
 async function executeCommand(containerId, command, options = {}) {
   const {
     workDir = '/',
-    user = 'root',
+    user = 'student',  // Changed from 'root' to match Dockerfile
     timeout = COMMAND_TIMEOUT,
-    shell = '/bin/sh'
+    shell = '/bin/bash'  // Changed from '/bin/sh' to match Dockerfile
   } = options;
+
+  console.log(`[sandboxExecutor] Executing command: "${command}" in container: ${containerId}, workDir: ${workDir}`);
 
   try {
     // Get container instance
@@ -36,7 +38,10 @@ async function executeCommand(containerId, command, options = {}) {
 
     // Verify container is running
     const containerInfo = await container.inspect();
+    console.log(`[sandboxExecutor] Container ${containerId} state: ${containerInfo.State.Status}, running: ${containerInfo.State.Running}`);
+    
     if (!containerInfo.State.Running) {
+      console.error(`[sandboxExecutor] Container ${containerId} is not running!`);
       return {
         success: false,
         stdout: '',
@@ -101,8 +106,31 @@ async function executeCommand(containerId, command, options = {}) {
             });
           }
 
-          // Handle stdout and stderr
-          stream.on('data', (chunk) => {
+          // Docker multiplexes streams - need to demultiplex them
+          // Use dockerode's demuxStream utility
+          const { PassThrough } = require('stream');
+          const stdoutStream = new PassThrough();
+          const stderrStream = new PassThrough();
+
+          // Demultiplex the stream
+          docker.modem.demuxStream(stream, stdoutStream, stderrStream);
+
+          // Collect stdout
+          stdoutStream.on('data', (chunk) => {
+            const data = chunk.toString('utf8');
+            
+            // Limit output size
+            if (stdout.length + stderr.length + data.length > MAX_OUTPUT_SIZE) {
+              stdout += '\n[Output truncated - exceeded maximum size]';
+              stream.destroy();
+              return;
+            }
+
+            stdout += data;
+          });
+
+          // Collect stderr
+          stderrStream.on('data', (chunk) => {
             const data = chunk.toString('utf8');
             
             // Limit output size
@@ -112,7 +140,7 @@ async function executeCommand(containerId, command, options = {}) {
               return;
             }
 
-            stdout += data;
+            stderr += data;
           });
 
           stream.on('error', (err) => {
@@ -132,6 +160,7 @@ async function executeCommand(containerId, command, options = {}) {
               clearTimeout(timeoutHandle);
 
               if (err) {
+                console.error(`[sandboxExecutor] Failed to inspect exec: ${err.message}`);
                 return resolve({
                   success: false,
                   stdout,
@@ -142,6 +171,7 @@ async function executeCommand(containerId, command, options = {}) {
               }
 
               exitCode = data.ExitCode;
+              console.log(`[sandboxExecutor] Command completed. ExitCode: ${exitCode}, stdout length: ${stdout.length}, stderr length: ${stderr.length}`);
               resolve({
                 success: exitCode === 0,
                 stdout: stdout.trim(),
@@ -174,9 +204,11 @@ async function executeCommand(containerId, command, options = {}) {
  * @returns {Promise<object>} Execution result
  */
 async function executeInDirectory(containerId, command, workDir = '/') {
+  console.log(`[sandboxExecutor] executeInDirectory - command: "${command}", workDir: ${workDir}`);
+  
   // Handle 'cd' command separately
-  if (command.trim().startsWith('cd ')) {
-    const targetDir = command.trim().substring(3).trim();
+  if (command.trim() === 'cd' || command.trim().startsWith('cd ')) {
+    const targetDir = command.trim() === 'cd' ? '~' : command.trim().substring(3).trim();
     return executeCdCommand(containerId, targetDir, workDir);
   }
 
@@ -196,27 +228,34 @@ async function executeInDirectory(containerId, command, workDir = '/') {
  * @returns {Promise<object>} Validation result
  */
 async function executeCdCommand(containerId, targetDir, currentDir = '/') {
+  console.log(`[sandboxExecutor] executeCdCommand - targetDir: "${targetDir}", currentDir: ${currentDir}`);
+  
   try {
     // Resolve the full path
     let fullPath;
     
     if (targetDir === '~') {
-      fullPath = '/root';
+      fullPath = '/home/student';  // Changed from '/root' to match student user
     } else if (targetDir === '-') {
-      // This would require tracking previous directory - for now, just root
-      fullPath = '/root';
+      // This would require tracking previous directory - for now, go home
+      fullPath = '/home/student';
     } else if (targetDir.startsWith('/')) {
       fullPath = path.normalize(targetDir);
     } else {
       fullPath = path.normalize(path.join(currentDir, targetDir));
     }
 
+    console.log(`[sandboxExecutor] Resolved path: ${fullPath}`);
+
     // Test if directory exists
     const result = await executeCommand(containerId, `test -d "${fullPath}" && echo "exists"`, {
       workDir: currentDir
     });
 
+    console.log(`[sandboxExecutor] Directory test result - stdout: "${result.stdout}", exitCode: ${result.exitCode}`);
+
     if (result.stdout.includes('exists')) {
+      console.log(`[sandboxExecutor] Directory exists, changing to: ${fullPath}`);
       return {
         success: true,
         stdout: fullPath,
@@ -225,6 +264,7 @@ async function executeCdCommand(containerId, targetDir, currentDir = '/') {
         newWorkDir: fullPath
       };
     } else {
+      console.log(`[sandboxExecutor] Directory does not exist: ${fullPath}`);
       return {
         success: false,
         stdout: '',
@@ -234,7 +274,7 @@ async function executeCdCommand(containerId, targetDir, currentDir = '/') {
       };
     }
   } catch (error) {
-    console.error('CD command error:', error);
+    console.error('[sandboxExecutor] CD command error:', error);
     return {
       success: false,
       stdout: '',
@@ -251,9 +291,16 @@ async function executeCdCommand(containerId, targetDir, currentDir = '/') {
  * @returns {Promise<boolean>} True if container is running
  */
 async function isContainerHealthy(containerId) {
-  // For development/testing, assume container is healthy
-  // TODO: Implement proper health check with Docker socket access
-  return true;
+  try {
+    const container = docker.getContainer(containerId);
+    const info = await container.inspect();
+    const isRunning = info.State.Running;
+    console.log(`[sandboxExecutor] Container ${containerId} health check: ${isRunning ? 'HEALTHY' : 'NOT RUNNING'}`);
+    return isRunning;
+  } catch (error) {
+    console.error(`[sandboxExecutor] Container ${containerId} health check failed:`, error.message);
+    return false;
+  }
 }
 
 /**

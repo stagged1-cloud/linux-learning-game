@@ -43,7 +43,7 @@ async function createSession(socketId, sessionData) {
     levelId,
     exerciseId,
     containerId,
-    workDir: '/',
+    workDir: '/home/student',  // Changed from '/' to match student user home
     commandHistory: [],
     createdAt: Date.now(),
     lastActivity: Date.now(),
